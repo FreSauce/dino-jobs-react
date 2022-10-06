@@ -22,11 +22,11 @@ const chats = [
     message: "Hello, this is a test message",
   },
   {
-    name: "Shardul Kurdukar",
+    name: "Shardul Kurukar",
     message: "Hello, this is a test message",
   },
   {
-    name: "Shardul Kurdukar",
+    name: "Shardul Kurukre",
     message: "Hello, this is a test message",
   },
   // {
@@ -53,7 +53,7 @@ const chats = [
 
 const ChatBox = () => {
   const [activeTab, setActiveTab] = useState("chat");
-  const evaluator = useRef(null);
+  const containerRef = useRef();
 
   return (
     <Container p={0} sx={{ height: "-webkit-fill-available" }} m={0}>
@@ -70,7 +70,7 @@ const ChatBox = () => {
             Evaluation
           </Tabs.Tab>
         </Tabs.List>
-        <Container p={0} sx={{ flexGrow: 2 }} m={0}>
+        <Container p={0} sx={{ flexGrow: 2 }} m={0} ref={containerRef}>
           <Tabs.Panel value="chat" sx={{ height: "100%", borderRadius: 0 }}>
             <Container
               p={5}
@@ -82,20 +82,18 @@ const ChatBox = () => {
                 sx={{ flexDirection: "column", flexGrow: 2 }}
               >
                 <Container p={0} m={0}>
+                  {console.log(containerRef?.current?.style)}
                   <div
                     style={{
                       display: "block",
+                      // height: `${containerRef.current.style.height}`,
                       flex: "1 1 0%",
                       overflowY: "auto",
                     }}
                   >
                     {chats.map((chat) => (
-                      <Group>
-                        <Avatar
-                          key={chat.name}
-                          src={chat.name}
-                          label={chat.name}
-                        >
+                      <Group key={chat.name}>
+                        <Avatar src={chat.name} label={chat.name}>
                           SK
                         </Avatar>
                         <Blockquote sx={{}} cite={`- ${chat.name}`} icon={null}>
@@ -132,7 +130,6 @@ const ChatBox = () => {
           >
             <RichTextEditor
               sticky
-              ref={evaluator}
               sx={{ height: "100%", borderRadius: 0 }}
               controls={[
                 ["bold", "italic", "underline", "link"],
