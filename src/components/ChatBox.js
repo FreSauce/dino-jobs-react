@@ -9,13 +9,51 @@ import {
   UnstyledButton,
   Avatar,
   ActionIcon,
+  TextInput,
+  Blockquote,
 } from "@mantine/core";
 import RichTextEditor from "@mantine/rte";
 import { IconSend } from "@tabler/icons";
-import { useState } from "react";
+import { useState, useRef } from "react";
+
+const chats = [
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
+  // {
+  //   name: "Shardul Kurdukar",
+  //   message: "Hello, this is a test message",
+  // },
+  // {
+  //   name: "Shardul Kurdukar",
+  //   message: "Hello, this is a test message",
+  // },
+  // {
+  //   name: "Shardul Kurdukar",
+  //   message: "Hello, this is a test message",
+  // },
+  // {
+  //   name: "Shardul Kurdukar",
+  //   message: "Hello, this is a test message",
+  // },
+  // {
+  //   name: "Shardul Kurdukar",
+  //   message: "Hello, this is a test message",
+  // },
+];
 
 const ChatBox = () => {
   const [activeTab, setActiveTab] = useState("chat");
+  const evaluator = useRef(null);
 
   return (
     <Container p={0} sx={{ height: "-webkit-fill-available" }} m={0}>
@@ -32,20 +70,60 @@ const ChatBox = () => {
             Evaluation
           </Tabs.Tab>
         </Tabs.List>
-        <Container p={0} sx={{ flexGrow: 2 }}>
+        <Container p={0} sx={{ flexGrow: 2 }} m={0}>
           <Tabs.Panel value="chat" sx={{ height: "100%", borderRadius: 0 }}>
-            <Container p={3} sx={{ height: "100%" }}>
-              <Group>
-                <Textarea
+            <Container
+              p={5}
+              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+            >
+              <Container
+                p={0}
+                m={0}
+                sx={{ flexDirection: "column", flexGrow: 2 }}
+              >
+                <Container p={0} m={0}>
+                  <div
+                    style={{
+                      display: "block",
+                      flex: "1 1 0%",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {chats.map((chat) => (
+                      <Group>
+                        <Avatar
+                          key={chat.name}
+                          src={chat.name}
+                          label={chat.name}
+                        >
+                          SK
+                        </Avatar>
+                        <Blockquote sx={{}} cite={`- ${chat.name}`} icon={null}>
+                          {chat.message}
+                        </Blockquote>
+                      </Group>
+                    ))}
+                  </div>
+                </Container>
+              </Container>
+              <Container
+                p={0}
+                m={0}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <TextInput
                   placeholder="Your comment"
-                  label="Your comment"
-                  withAsterisk
                   sx={{ flexGrow: 1 }}
+                  pr={10}
                 />
-                <ActionIcon variant="light">
-                  <IconSend size={64} />
+                <ActionIcon variant="transparent" color="violet">
+                  <IconSend size={32} />
                 </ActionIcon>
-              </Group>
+              </Container>
             </Container>
           </Tabs.Panel>
           <Tabs.Panel
@@ -54,11 +132,11 @@ const ChatBox = () => {
           >
             <RichTextEditor
               sticky
+              ref={evaluator}
               sx={{ height: "100%", borderRadius: 0 }}
               controls={[
-                ["bold", "italic", "underline", "link", "image"],
+                ["bold", "italic", "underline", "link"],
                 ["unorderedList", "orderedList"],
-                ["sup", "sub"],
                 ["alignLeft", "alignCenter", "alignRight"],
               ]}
             />
@@ -70,3 +148,5 @@ const ChatBox = () => {
 };
 
 export default ChatBox;
+
+// https://pattern.monster/japanese-pattern-2/
