@@ -1,4 +1,4 @@
-module github.com/someone/verify
+module github.com/FreSauce/dino-jobs-react/tree/master/netlify/functions/verify
 
 go 1.19
 
