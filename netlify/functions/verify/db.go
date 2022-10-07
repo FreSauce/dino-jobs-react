@@ -70,6 +70,13 @@ func createUser(client *mongo.Client, data SignUpRequest) (User, string) {
 	return user, userToken
 }
 
+func verifyUserEmail(email string) {
+	client := connect()
+	userCollection := client.Database("dinojobs").Collection("users")
+	userCollection.UpdateOne(context.TODO(), bson.M{"email": email}, bson.M{"$set": bson.M{"email_verified": true}})
+	defer disconnect(client)
+}
+
 func validateRequest(req SignUpRequest) bool {
 	emailMatch := regexp.MustCompile(`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`).MatchString(req.Email)
 	passwordMatch := regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(req.Password) && len(req.Password) >= 8
