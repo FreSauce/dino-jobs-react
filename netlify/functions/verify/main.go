@@ -20,9 +20,9 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 		}, nil
 	}
 
-	if isAuth {
-		verifyUserEmail(email)
-	}
+	// if isAuth {
+	// 	verifyUserEmail(email)
+	// }
 
 	return &events.APIGatewayProxyResponse{
 		StatusCode:      200,
