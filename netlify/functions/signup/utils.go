@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	URL = "https://localhost:8888/.netlify/functions"
+	URL = "http://localhost:8888/.netlify/functions"
 )
 
 type Claims struct {

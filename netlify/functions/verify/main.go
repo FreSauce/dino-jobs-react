@@ -9,26 +9,28 @@ import (
 )
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
-	fmt.Printf(request.QueryStringParameters["token"])
 	token := request.QueryStringParameters["token"]
-
-	isAuth, email, role, err := verifyToken(token)
+	fmt.Println(token)
+	isAuth, email, _, err := verifyToken(token)
 	if err != nil {
 		return &events.APIGatewayProxyResponse{
-			StatusCode: 401,
-			Body:       "Invalid token",
+			StatusCode: 500,
+			Body:       "Error verifying token",
 		}, nil
 	}
 
-	// if isAuth {
-	// 	verifyUserEmail(email)
-	// }
-
+	client := connect()
+	if isAuth {
+		updateEmailVerified(client, email)
+		return &events.APIGatewayProxyResponse{
+			StatusCode: 200,
+			Body:       fmt.Sprintf("Email verified for %s", email),
+		}, nil
+	}
+	defer disconnect(client)
 	return &events.APIGatewayProxyResponse{
-		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "text/plain"},
-		Body:            fmt.Sprintf("Hello, world!"),
-		IsBase64Encoded: false,
+		StatusCode: 401,
+		Body:       "Unauthorized Access",
 	}, nil
 }
 
