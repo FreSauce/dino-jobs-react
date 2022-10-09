@@ -27,13 +27,13 @@ const Login = () => {
   };
 
   return (
-    <div style={{ height: '100vh', backgroundColor: 'black' }} >
-      <div className='pattern-bg'></div>
+    <div style={{ height: '100vh', backgroundColor: 'black' }} className='pattern-bg' >
+      {/* <div className='pattern-bg'></div> */}
       <Grid sx={{ height: '100vh', width: '100%' }} m={0}>
         <Grid.Col>
           <Container sx={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <MediaQuery query="(max-width: 600px)" styles={{ width: '100%' }}>
-              <Box sx={{ width: '70%', backgroundColor: '#191c24', borderRadius: '4px', color: 'white' }} p={30} pt={15}>
+              <Box sx={{ width: '70%', backgroundColor: '#181818', opacity: 0.9, borderRadius: '15px', color: 'white' }} p={30} pt={15}>
                 <Text sx={{ fontWeight: '900', fontSize: '2.5rem', textAlign: "center" }} mb={20}>HubDex</Text>
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                   <Text mb={5} sx={{ fontWeight: '600', fontSize: '1.25rem' }}>Hello! Let's get started</Text>
