@@ -1,12 +1,8 @@
 import {
   Container,
-  Divider,
   Text,
   Tabs,
-  Textarea,
-  Button,
   Group,
-  UnstyledButton,
   Avatar,
   ActionIcon,
   TextInput,
@@ -14,9 +10,10 @@ import {
 } from "@mantine/core";
 import RichTextEditor from "@mantine/rte";
 import { IconSend } from "@tabler/icons";
+import { useEffect } from "react";
 import { useState, useRef } from "react";
 
-const chats = [
+const chatDB = [
   {
     name: "Shardul Kurdukar",
     message: "Hello, this is a test message",
@@ -29,31 +26,44 @@ const chats = [
     name: "Shardul Kurukre",
     message: "Hello, this is a test message",
   },
-  // {
-  //   name: "Shardul Kurdukar",
-  //   message: "Hello, this is a test message",
-  // },
-  // {
-  //   name: "Shardul Kurdukar",
-  //   message: "Hello, this is a test message",
-  // },
-  // {
-  //   name: "Shardul Kurdukar",
-  //   message: "Hello, this is a test message",
-  // },
-  // {
-  //   name: "Shardul Kurdukar",
-  //   message: "Hello, this is a test message",
-  // },
-  // {
-  //   name: "Shardul Kurdukar",
-  //   message: "Hello, this is a test message",
-  // },
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
+  {
+    name: "Shardul Kurdukar",
+    message: "Hello, this is a test message",
+  },
 ];
 
 const ChatBox = () => {
   const [activeTab, setActiveTab] = useState("chat");
+  const [chats, setChats] = useState([])
   const containerRef = useRef();
+  const chatboxRef = useRef();
+
+  useEffect(() => {
+    console.log('hehe');
+    const r = () => {
+      chatboxRef.current.style.height = containerRef.current.clientHeight + 'px'
+    };
+    r();
+    setChats(chatDB)
+    // window.addEventListener('resize', r);
+    // return _ => window.removeEventListener('resize', r);
+  }, [chatboxRef]);
 
   return (
     <Container p={0} sx={{ height: "-webkit-fill-available" }} m={0}>
@@ -70,7 +80,7 @@ const ChatBox = () => {
             Evaluation
           </Tabs.Tab>
         </Tabs.List>
-        <Container p={0} sx={{ flexGrow: 2 }} m={0} ref={containerRef}>
+        <Container p={0} sx={{ flexGrow: 2 }} m={0} >
           <Tabs.Panel value="chat" sx={{ height: "100%", borderRadius: 0 }}>
             <Container
               p={5}
@@ -80,29 +90,25 @@ const ChatBox = () => {
                 p={0}
                 m={0}
                 sx={{ flexDirection: "column", flexGrow: 2 }}
+                ref={containerRef}
               >
-                <Container p={0} m={0}>
-                  {console.log(containerRef?.current?.style)}
-                  <div
-                    style={{
-                      display: "block",
-                      // height: `${containerRef.current.style.height}`,
-                      flex: "1 1 0%",
-                      overflowY: "auto",
-                    }}
-                  >
-                    {chats.map((chat) => (
-                      <Group key={chat.name}>
-                        <Avatar src={chat.name} label={chat.name}>
-                          SK
-                        </Avatar>
-                        <Blockquote sx={{}} cite={`- ${chat.name}`} icon={null}>
-                          {chat.message}
-                        </Blockquote>
-                      </Group>
-                    ))}
-                  </div>
-                </Container>
+                {console.log(containerRef?.current?.clientHeight)}
+                <div
+                  ref={chatboxRef}
+                  style={{ overflowY: "auto" }}
+                  className='custom-scroll'
+                >
+                  {chats.map((chat, index) => (
+                    <Group key={index}>
+                      <Avatar src={chat.name} label={chat.name}>
+                        SK
+                      </Avatar>
+                      <Blockquote sx={{}} cite={`- ${chat.name}`} icon={null}>
+                        {chat.message}
+                      </Blockquote>
+                    </Group>
+                  ))}
+                </div>
               </Container>
               <Container
                 p={0}

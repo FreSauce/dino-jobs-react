@@ -68,8 +68,6 @@ const InterviewPanel = () => {
               span={3}
               sx={{
                 backgroundColor: "#202326",
-                // display: "flex",
-                // flexDirection: "column",
               }}
             >
               <Stack sx={{ height: "100%" }}>

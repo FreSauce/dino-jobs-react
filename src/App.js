@@ -1,5 +1,8 @@
 import './App.css';
 import { MantineProvider } from '@mantine/core';
+import InterviewPanel from './pages/InterviewPanel';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
 
 function App() {
   return (
