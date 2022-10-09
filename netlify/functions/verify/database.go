@@ -2,14 +2,9 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
 	"os"
-	"regexp"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -46,6 +41,11 @@ func disconnect(client *mongo.Client) {
 	client.Disconnect(context.TODO())
 }
 
+func updateEmailVerified(client *mongo.Client, email string) {
+	userCollection := client.Database("dinojobs").Collection("users")
+	userCollection.UpdateOne(context.TODO(), bson.M{"email": email}, bson.M{"$set": bson.M{"email_verified": true}})
+}
+
 func fetchUser(client *mongo.Client, email string) User {
 	userCollection := client.Database("dinojobs").Collection("users")
 	var user User
@@ -68,46 +68,4 @@ func createUser(client *mongo.Client, data SignUpRequest) (User, string) {
 		panic(err)
 	}
 	return user, userToken
-}
-
-func validateRequest(req SignUpRequest) bool {
-	emailMatch := regexp.MustCompile(`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`).MatchString(req.Email)
-	passwordMatch := regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(req.Password) && len(req.Password) >= 8
-	return emailMatch && passwordMatch
-}
-
-func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
-	p := SignUpRequest{}
-	json.Unmarshal([]byte(request.Body), &p)
-
-	if !validateRequest(p) {
-		return &events.APIGatewayProxyResponse{
-			StatusCode: 401,
-			Body:       "Invalid email or password",
-		}, nil
-	}
-
-	client := connect()
-	user := fetchUser(client, p.Email)
-	if user.Email != "" {
-		return &events.APIGatewayProxyResponse{
-			StatusCode: 401,
-			Body:       "Email already exists",
-		}, nil
-	}
-	user, token := createUser(client, p)
-	isAuth, email, role, err := verifyToken(token)
-	fmt.Println(isAuth, email, role, err)
-	SendMail(user, token)
-	defer disconnect(client)
-	return &events.APIGatewayProxyResponse{
-		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "text/plain"},
-		Body:            "Added user successfully",
-		IsBase64Encoded: false,
-	}, nil
-}
-
-func main() {
-	lambda.Start(handler)
 }
