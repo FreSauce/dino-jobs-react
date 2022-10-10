@@ -1,4 +1,3 @@
 const authInitialState = {
-	user: {},
-
-}
+  user: { email: "suvanth", role: "manager" },
+};

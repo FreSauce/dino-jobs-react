@@ -79,8 +79,8 @@ func verifyToken(tokenString string) (bool, string, string, error) {
 	return false, "", "", err
 }
 
-func validateRequest(req SignUpRequest) bool {
-	emailMatch := regexp.MustCompile(`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`).MatchString(req.Email)
-	passwordMatch := regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(req.Password) && len(req.Password) >= 8
+func validateRequest(email, password string) bool {
+	emailMatch := regexp.MustCompile(`^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$`).MatchString(email)
+	passwordMatch := regexp.MustCompile(`^[a-zA-Z0-9]+$`).MatchString(password) && len(password) >= 8
 	return emailMatch && passwordMatch
 }
