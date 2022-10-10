@@ -22,7 +22,7 @@ const AuthContextProvider = ({ children }) => {
       userData
     );
     console.log(res);
-    return data;
+    return res.data;
   };
 
   return (
