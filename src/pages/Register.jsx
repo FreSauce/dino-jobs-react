@@ -3,13 +3,19 @@ import { Link } from 'react-router-dom';
 import { useForm } from '@mantine/form';
 import React, { useState } from 'react'
 import validator from 'validator';
+import axios from 'axios';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const Register = () => {
 	const [loading, setLoading] = useState(false);
+	const { signup } = useContext(AuthContext);
+
 
 	const form = useForm({
 		validateInputOnChange: true,
 		initialValues: {
+			fullname: '',
 			email: '',
 			password: '',
 			confirmPassword: '',
@@ -23,8 +29,18 @@ const Register = () => {
 	});
 	const handleSubmit = async (values) => {
 		setLoading(true);
-		await new Promise((resolve) => setTimeout(resolve, 1000));
 		console.log(values);
+		const res = await signup({
+			email: values.email,
+			full_name: values.fullname,
+			password: values.password
+		})
+		// const res = await axios.post('https://dinojobs.netlify.app/.netlify/functions/signup', {
+		// 	email: values.email,
+		// 	full_name: values.fullname,
+		// 	password: values.password
+		// }, {})
+		// await new Promise((resolve) => setTimeout(resolve, 1000));
 		setLoading(false);
 	};
 
@@ -39,6 +55,13 @@ const Register = () => {
 								<form onSubmit={form.onSubmit(handleSubmit)}>
 									<Text mb={5} sx={{ fontWeight: '600', fontSize: '1.25rem' }}>Hello! Let's get started</Text>
 									<Text mb={15} sx={{ fontWeight: '500', fontSize: '1.1rem' }}>Sign Up to continue</Text>
+									<TextInput
+										mb={13}
+										withAsterisk
+										label='Full Name'
+										placeholder='urmom'
+										{...form.getInputProps('fullname')}
+									/>
 									<TextInput
 										mb={13}
 										withAsterisk
