@@ -1,35 +1,35 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { createContext } from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { createContext } from "react";
 
 export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
-	// const { state, dispatch } = useReducer(authReducer);
-	const [user, setUser] = useState();
-	const api = axios.create({
-		headers: {
-			'Context-Type': 'text/plain',
-			// 'Access-Control-Allow-Origin': '*'
-		}
-	})
+  // const { state, dispatch } = useReducer(authReducer);
+  const [user, setUser] = useState();
+  const api = axios.create({
+    headers: {
+      "Context-Type": "text/plain",
+      // 'Access-Control-Allow-Origin': '*'
+    },
+  });
 
-	useEffect(() => {
+  useEffect(() => {}, []);
 
-	}, []);
+  const signup = async (userData) => {
+    const res = await api.post(
+      "https://dinojobs.netlify.app/.netlify/functions/signup",
+      userData
+    );
+    console.log(res);
+    return data;
+  };
 
-	const signup = async (userData) => {
-		const res = await api.post('https://dinojobs-0b0fbc.netlify.live/.netlify/functions/signup', userData);
-		const data = (await res).data();
-		console.log(data);
-		return data;
-	}
+  return (
+    <AuthContext.Provider value={{ user, signup }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-	return (
-		<AuthContext.Provider value={{ user, signup }}>
-			{children}
-		</AuthContext.Provider>
-	)
-}
-
-export default AuthContextProvider
+export default AuthContextProvider;
