@@ -18,12 +18,6 @@ type User struct {
 	Role          string `bson:"role"`
 }
 
-type SignUpRequest struct {
-	FullName string `json:"full_name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 func connect() *mongo.Client {
 	uri := os.Getenv("MONGODB_URI")
 	if uri == "" {

@@ -22,6 +22,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if !validateRequest(p) {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
+			Headers:    map[string]string{"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*"},
 			Body:       "Invalid email or password",
 		}, nil
 	}
@@ -31,6 +32,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if user.Email != "" {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
+			Headers:    map[string]string{"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*"},
 			Body:       "Email already exists",
 		}, nil
 	}
@@ -41,7 +43,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	defer disconnect(client)
 	return &events.APIGatewayProxyResponse{
 		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "text/plain"},
+		Headers:         map[string]string{"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*"},
 		Body:            "Added user successfully",
 		IsBase64Encoded: false,
 	}, nil
