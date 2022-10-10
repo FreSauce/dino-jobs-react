@@ -32,6 +32,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 		fmt.Println(p.Email, p.Password)
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
+			Headers:    map[string]string{"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*"},
 			Body:       "Invalid email or password format",
 		}, nil
 	}
@@ -41,6 +42,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if !isAuthorized {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
+			Headers:    map[string]string{"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*"},
 			Body:       "Email and password does not match or user is not verified",
 		}, nil
 	}
@@ -55,7 +57,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	defer disconnect(client)
 	return &events.APIGatewayProxyResponse{
 		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "application/json"},
+		Headers:         map[string]string{"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"},
 		Body:            string(responseText),
 		IsBase64Encoded: false,
 	}, nil
