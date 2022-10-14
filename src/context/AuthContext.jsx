@@ -18,7 +18,7 @@ const AuthContextProvider = ({ children }) => {
 
   const signup = async (userData) => {
     const res = await api.post(
-      "https://dinojobs.netlify.app/.netlify/functions/signup",
+      "https://dinojobs.netlify.app/.netlify/functions/register",
       userData
     );
     console.log(res);

@@ -15,8 +15,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if err != nil {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 500,
-			Headers:    map[string]string{"Content-Type": "text/plain"},
-			Body:       "Error verifying token",
+			Headers: map[string]string{
+				"Content-Type":                 "application/json",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			},
+			Body: `{"error": "Error verifying token"}`,
 		}, nil
 	}
 
@@ -25,15 +30,25 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 		updateEmailVerified(client, email)
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 200,
-			Headers:    map[string]string{"Content-Type": "text/plain"},
-			Body:       fmt.Sprintf("Email verified for %s", email),
+			Headers: map[string]string{
+				"Content-Type":                 "application/json",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			},
+			Body: fmt.Sprintf(`{"res": "Email verified for %s"}`, email),
 		}, nil
 	}
 	defer disconnect(client)
 	return &events.APIGatewayProxyResponse{
 		StatusCode: 401,
-		Headers:    map[string]string{"Content-Type": "text/plain"},
-		Body:       "Unauthorized Access",
+		Headers: map[string]string{
+			"Content-Type":                 "application/json",
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+		},
+		Body: `{"error": "Unauthorized Access"}`,
 	}, nil
 }
 

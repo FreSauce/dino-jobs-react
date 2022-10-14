@@ -23,8 +23,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if !isAuth || err != nil {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
-			Headers:    map[string]string{"Content-Type": "text/plain"},
-			Body:       "Unauthorized user",
+			Headers: map[string]string{
+				"Content-Type":                 "application/json",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			},
+			Body: `{"error": "Unauthorized user"}`,
 		}, nil
 	}
 
@@ -35,8 +40,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	}
 	responseText, _ := json.Marshal(resp)
 	return &events.APIGatewayProxyResponse{
-		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "application/json"},
+		StatusCode: 200,
+		Headers: map[string]string{
+			"Content-Type":                 "application/json",
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+		},
 		Body:            string(responseText),
 		IsBase64Encoded: false,
 	}, nil

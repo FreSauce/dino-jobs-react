@@ -22,8 +22,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if !validateRequest(p) {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
-			Headers:    map[string]string{"Content-Type": "text/plain"},
-			Body:       "Invalid email or password",
+			Headers: map[string]string{
+				"Content-Type":                 "application/json",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			},
+			Body: `{"error": "Invalid email or password format"}`,
 		}, nil
 	}
 
@@ -32,8 +37,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if user.Email != "" {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
-			Headers:    map[string]string{"Content-Type": "text/plain"},
-			Body:       "Email already exists",
+			Headers: map[string]string{
+				"Content-Type":                 "application/json",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			},
+			Body: `{"error": "Email already exists"}`,
 		}, nil
 	}
 	user, token := createUser(client, p)
@@ -42,9 +52,14 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	SendMail(user, token)
 	defer disconnect(client)
 	return &events.APIGatewayProxyResponse{
-		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "text/plain"},
-		Body:            "Added user successfully",
+		StatusCode: 200,
+		Headers: map[string]string{
+			"Content-Type":                 "application/json",
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+		},
+		Body:            `{"res": "Added user successfully"}`,
 		IsBase64Encoded: false,
 	}, nil
 }

@@ -32,8 +32,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 		fmt.Println(p.Email, p.Password)
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
-			Headers:    map[string]string{"Content-Type": "text/plain"},
-			Body:       "Invalid email or password format",
+			Headers: map[string]string{
+				"Content-Type":                 "application/json",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			},
+			Body: `{"error": "Invalid email or password format"}`,
 		}, nil
 	}
 
@@ -42,8 +47,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if !isAuthorized {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
-			Headers:    map[string]string{"Content-Type": "text/plain"},
-			Body:       "Email and password does not match or user is not verified",
+			Headers: map[string]string{
+				"Content-Type":                 "application/json",
+				"Access-Control-Allow-Origin":  "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			},
+			Body: `{"error": "Email and password does not match or user is not verified"}`,
 		}, nil
 	}
 	token, _ := generateToken(user)
@@ -56,8 +66,13 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	responseText, _ := json.Marshal(resp)
 	defer disconnect(client)
 	return &events.APIGatewayProxyResponse{
-		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "application/json"},
+		StatusCode: 200,
+		Headers: map[string]string{
+			"Content-Type":                 "application/json",
+			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+		},
 		Body:            string(responseText),
 		IsBase64Encoded: false,
 	}, nil
