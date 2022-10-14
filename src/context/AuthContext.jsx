@@ -25,6 +25,15 @@ const AuthContextProvider = ({ children }) => {
     return res.data;
   };
 
+  const login = async (userData) => {
+    const res = await api.post(
+      "https://dinojobs.netlify.app/.netlify/functions/login",
+      userData
+    );
+    console.log(res);
+    return res.data;
+  };
+
   return (
     <AuthContext.Provider value={{ user, signup }}>
       {children}

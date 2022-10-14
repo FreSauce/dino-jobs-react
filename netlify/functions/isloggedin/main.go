@@ -23,7 +23,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	if !isAuth || err != nil {
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 401,
-			Headers:    map[string]string{"Content-Type": "text/plain", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type"},
+			Headers:    map[string]string{"Content-Type": "text/plain"},
 			Body:       "Unauthorized user",
 		}, nil
 	}
@@ -36,7 +36,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 	responseText, _ := json.Marshal(resp)
 	return &events.APIGatewayProxyResponse{
 		StatusCode:      200,
-		Headers:         map[string]string{"Content-Type": "application/json", "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "Content-Type"},
+		Headers:         map[string]string{"Content-Type": "application/json"},
 		Body:            string(responseText),
 		IsBase64Encoded: false,
 	}, nil
