@@ -3,33 +3,41 @@ import SimplePeer from "simple-peer";
 import { AuthContext } from "../context/AuthContext";
 
 const useWebRTC = () => {
-  const {
-    state: { user },
-  } = useContext(AuthContext);
-  const [peer1, setPeer1] = useState();
-  const [peer2, setPeer2] = useState();
+  const { user } = useContext(AuthContext);
+  const [peer, setPeer] = useState(
+    new SimplePeer({
+      initiator: true,
+    })
+  );
   const videoRef = useRef();
   const chatRef = useRef();
   const editorRef = useRef();
 
   useEffect(() => {
-    setPeer1(
+    setPeer(
       new SimplePeer({
-        initiator: true,
+        initiator: user.role === "manager",
       })
     );
   }, []);
 
+  sendOfferToServer = (offer) => {};
+
   useEffect(() => {
-    if (peer1 != null) {
-      peer1.addListner("signal", (data) => {
-        console.log("SIGNAL", JSON.stringify(data));
+    if (peer != null) {
+      peer.addListener("signal", (data) => {
+        if (data.type === "offer") {
+          console.log("offer", data);
+        }
+        if (data.type === "answer") {
+          console.log("answer", data);
+        }
       });
     }
-    return () => peer1.destroy();
-  }, [peer1]);
+    return () => peer.destroy();
+  }, [peer]);
 
-  return <div> useWebRTC</div>;
+  return [peer, videoRef, chatRef, editorRef];
 };
 
 export default useWebRTC;
