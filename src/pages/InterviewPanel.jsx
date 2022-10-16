@@ -13,8 +13,11 @@ import { HiUserAdd } from "react-icons/hi";
 import { FiLogOut } from "react-icons/fi";
 import ChatBox from "../components/ChatBox";
 import RichTextEditor from "@mantine/rte";
+import useWebRTC from "../hooks/useWebRTC";
 
 const InterviewPanel = () => {
+  const [peer, videoRef, chatRef, editorRef] = useWebRTC();
+
   return (
     <Container sx={{ height: "100vh", backgroundColor: "#202326" }} fluid p={0}>
       <Grid gutter={0}>

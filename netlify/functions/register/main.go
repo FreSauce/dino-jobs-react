@@ -26,7 +26,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 				"Content-Type":                 "application/json",
 				"Access-Control-Allow-Origin":  "*",
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 			},
 			Body: `{"error": "Invalid email or password format"}`,
 		}, nil
@@ -41,7 +41,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 				"Content-Type":                 "application/json",
 				"Access-Control-Allow-Origin":  "*",
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 			},
 			Body: `{"error": "Email already exists"}`,
 		}, nil
@@ -57,7 +57,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 			"Content-Type":                 "application/json",
 			"Access-Control-Allow-Origin":  "*",
 			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 		},
 		Body:            `{"res": "Added user successfully"}`,
 		IsBase64Encoded: false,

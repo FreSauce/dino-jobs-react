@@ -19,7 +19,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 				"Content-Type":                 "application/json",
 				"Access-Control-Allow-Origin":  "*",
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 			},
 			Body: `{"error": "Error verifying token"}`,
 		}, nil
@@ -34,7 +34,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 				"Content-Type":                 "application/json",
 				"Access-Control-Allow-Origin":  "*",
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+				"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 			},
 			Body: fmt.Sprintf(`{"res": "Email verified for %s"}`, email),
 		}, nil
@@ -46,7 +46,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (*event
 			"Content-Type":                 "application/json",
 			"Access-Control-Allow-Origin":  "*",
 			"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Content-Type, Authorization",
+			"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
 		},
 		Body: `{"error": "Unauthorized Access"}`,
 	}, nil
