@@ -14,9 +14,11 @@ import { FiLogOut } from "react-icons/fi";
 import ChatBox from "../components/ChatBox";
 import RichTextEditor from "@mantine/rte";
 import useWebRTC from "../hooks/useWebRTC";
+import useAuth from "../hooks/useAuth";
 
 const InterviewPanel = () => {
   const [peer, videoRef, chatRef, editorRef] = useWebRTC();
+  const { user, logout } = useAuth();
 
   return (
     <Container sx={{ height: "100vh", backgroundColor: "#202326" }} fluid p={0}>
@@ -46,7 +48,12 @@ const InterviewPanel = () => {
             <Button variant="filled" leftIcon={<HiUserAdd />}>
               Invite
             </Button>
-            <Button variant="filled" color="red" leftIcon={<FiLogOut />}>
+            <Button
+              variant="filled"
+              color="red"
+              leftIcon={<FiLogOut />}
+              onClick={logout}
+            >
               End Interview
             </Button>
           </Group>

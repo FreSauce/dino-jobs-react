@@ -1,33 +1,26 @@
 import "./App.css";
-import { MantineProvider } from "@mantine/core";
 import InterviewPanel from "./pages/InterviewPanel";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import AuthContextProvider from "./context/AuthContext";
 import Register from "./pages/Register";
-import PrivateRoute from "./components/PrivateRoute";
-import Jobs from './pages/Jobs';
-import Home from "./pages/Home";
+import CustomRoutes from "./components/CustomRoutes";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import Jobs from "./pages/Jobs";
 
 function App() {
+  const { user } = useContext(AuthContext);
   return (
-    <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
-      theme={{ colorScheme: "dark", }}
-    >
-      <div className="App">
-        <AuthContextProvider>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/interview" element={<InterviewPanel />} />
-            <Route path="/jobs" element={<Jobs />} />
-            <Route path="/" element={<PrivateRoute />} />
-          </Routes>
-        </AuthContextProvider>
-      </div>
-    </MantineProvider>
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Jobs />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route element={<CustomRoutes allowedRoles={"user"} />}>
+          <Route path="/interview" element={<InterviewPanel />} />
+        </Route>
+      </Routes>
+    </div>
   );
 }
 

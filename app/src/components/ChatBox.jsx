@@ -50,17 +50,18 @@ const chatDB = [
 
 const ChatBox = () => {
   const [activeTab, setActiveTab] = useState("chat");
-  const [chats, setChats] = useState([])
+  const [chats, setChats] = useState([]);
   const containerRef = useRef();
   const chatboxRef = useRef();
 
   useEffect(() => {
-    console.log('hehe');
+    console.log("hehe");
     const r = () => {
-      chatboxRef.current.style.height = containerRef.current.clientHeight + 'px'
+      chatboxRef.current.style.height =
+        containerRef.current.clientHeight + "px";
     };
-    r();
-    setChats(chatDB)
+    // r();
+    setChats(chatDB);
     // window.addEventListener('resize', r);
     // return _ => window.removeEventListener('resize', r);
   }, [chatboxRef]);
@@ -80,7 +81,7 @@ const ChatBox = () => {
             Evaluation
           </Tabs.Tab>
         </Tabs.List>
-        <Container p={0} sx={{ flexGrow: 2 }} m={0} >
+        <Container p={0} sx={{ flexGrow: 2 }} m={0}>
           <Tabs.Panel value="chat" sx={{ height: "100%", borderRadius: 0 }}>
             <Container
               p={5}
@@ -96,7 +97,7 @@ const ChatBox = () => {
                 <div
                   ref={chatboxRef}
                   style={{ overflowY: "auto" }}
-                  className='custom-scroll'
+                  className="custom-scroll"
                 >
                   {chats.map((chat, index) => (
                     <Group key={index}>
@@ -151,5 +152,3 @@ const ChatBox = () => {
 };
 
 export default ChatBox;
-
-// https://pattern.monster/japanese-pattern-2/

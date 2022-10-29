@@ -1,35 +1,35 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const {
-	updateUser,
-	applyJob,
-	createJob,
-	uploadUserPhoto,
-	logout,
-	deleteUser,
-	getJobApplicants,
-	managerProfile
+  fetchUser,
+  updateUser,
+  applyJob,
+  createJob,
+  uploadUserPhoto,
+  logout,
+  deleteUser,
+  getJobApplicants,
+  managerProfile,
 } = require("../controllers/userController");
 const { getLogin, checkMan, checkAdmin } = require("../middleware");
 
-
 const userRouter = Router();
 
-userRouter.use(getLogin)
+userRouter.use(getLogin);
 
+userRouter.get("/profile", fetchUser);
 
 userRouter.post("/update-user", uploadUserPhoto, updateUser);
 
-userRouter.post('/apply-job', applyJob);
+userRouter.post("/apply-job", applyJob);
 
-userRouter.post('/create-job', checkMan, createJob);
+userRouter.post("/create-job", checkMan, createJob);
 
-userRouter.get('/:type/logout', logout);
+userRouter.get("/:type/logout", logout);
 
-userRouter.get('/admin/delete/:type/:user', checkAdmin, deleteUser);
+userRouter.get("/admin/delete/:type/:user", checkAdmin, deleteUser);
 
-userRouter.post('/job/:job', checkMan, getJobApplicants);
+userRouter.post("/job/:job", checkMan, getJobApplicants);
 
-userRouter.post('/manager/home', checkMan, managerProfile);
-
+userRouter.post("/manager/home", checkMan, managerProfile);
 
 module.exports = userRouter;
