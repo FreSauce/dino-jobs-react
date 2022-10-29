@@ -1,20 +1,25 @@
 const { User } = require("./models");
 
 const getLogin = async (req, res, next) => {
-	const cookie = req.cookies.login;
+	// const cookie = req.cookies.login;
 	let token;
 	if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
 		token = req.headers.authorization.split(" ")[1];
 	} else if (req.cookies?.auth) {
 		token = req.cookies?.auth;
 	}
+	console.log(token);
 	if (!token) return next({ status: 401, message: 'Not Authorized' });
-	const user = await User.findByToken(cookie)
+	const user = await User.findByToken(token)
 	try {
 		if (user) {
 			if (user.email_verified) {
-				req.user = user.toJSON();
-				next();
+				if (user.logged_in) {
+					req.user = user.toJSON();
+					next();
+				} else {
+					res.clearCookie('login').status(401).json({ message: 'User not authorized' });
+				}
 			} else {
 				next({ message: "Email not verified", status: 401 });
 			}
@@ -58,7 +63,7 @@ const checkAdmin = (req, res, next) => {
 	}
 }
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (req, res, next, err) => {
 	console.log(err);
 	res.status(err.status).json({ message: err.message });
 };

@@ -6,13 +6,15 @@ import Login from "./pages/Login";
 import AuthContextProvider from "./context/AuthContext";
 import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
+import Home from "./pages/Home";
+import Jobs from "./pages/Jobs";
 
 function App() {
   return (
     <MantineProvider
       withGlobalStyles
       withNormalizeCSS
-      theme={{ colorScheme: "dark" }}
+      theme={{ colorScheme: "dark", }}
     >
       <div className="App">
         <AuthContextProvider>
@@ -20,6 +22,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<PrivateRoute />}>
+              <Route path="/" element={<Home />} />
+              <Route path='/jobs' element={<Jobs />} />
               <Route path="/interview" element={<InterviewPanel />} />
             </Route>
           </Routes>

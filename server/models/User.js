@@ -38,6 +38,10 @@ const UserSchema = new Schema({
 	phone: {
 		type: String,
 	},
+	logged_in: {
+		type: Boolean,
+		default: false,
+	},
 	avatar: {
 		type: String,
 		default: null,
@@ -58,8 +62,6 @@ UserSchema.methods.toJSON = function () {
 	const userObject = user.toObject();
 	delete userObject.password;
 	delete userObject.tokens;
-	userObject.key = userObject._id;
-	delete userObject._id;
 	return userObject;
 };
 

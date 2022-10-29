@@ -21,7 +21,7 @@ const useWebRTC = () => {
     );
   }, []);
 
-  sendOfferToServer = (offer) => {};
+  const sendOfferToServer = (offer) => { };
 
   useEffect(() => {
     if (peer != null) {

@@ -55,7 +55,7 @@ const mailServer = nodemailer.createTransport({
 	},
 });
 
-function login(req, flag, res) {
+async function login(req, flag, res) {
 	const { email, password, is_checked } = req.body;
 	return User.findOne({ email })
 		.then((user) => {
@@ -64,11 +64,10 @@ function login(req, flag, res) {
 			}
 			return user.comparePassword(password);
 		})
-		.then((user) => {
+		.then(async (user) => {
 			if (user && user.role === flag) {
-				return user.generateToken().then((token) => {
-					return token;
-				});
+				let hg = await User.findByIdAndUpdate(user._id, { logged_in: true });
+				return user.generateToken();
 			} else res.status(400).send('PASSWORD DOESNT MATCH');
 		})
 		.catch((err) => {
@@ -97,7 +96,7 @@ async function updateUser(req, res, next) {
 	req.body.avatar = req.file.filename;
 	console.log(req.body)
 	try {
-		let doc = await User.findOneAndUpdate({ _id: req.user.key }, req.body, { new: false });
+		let doc = await User.findOneAndUpdate({ _id: req.user._id }, req.body, { new: false });
 		console.log(doc);
 	} catch (err) {
 		req.err = err;
@@ -156,7 +155,7 @@ async function applyJob(req, res, next) {
 		const user = req.user;
 		Job.findOne({ _id: job._id }, (err, docs) => {
 			console.log(docs);
-			User.updateOne({ _id: user.key.toString() }, { $push: { applied_jobs: docs } }, (err, docs) => {
+			User.updateOne({ _id: user._id.toString() }, { $push: { applied_jobs: docs } }, (err, docs) => {
 				console.log(docs);
 				res.status(200).json({ result: "Job Applied" });
 			});
@@ -173,7 +172,7 @@ const createJob = async (req, res, next) => {
 	const user_id = req.user;
 	try {
 		job.remote = job.remote === 'True' ? true : false;
-		const user = await User.findOne({ _id: user_id.key }).populate('company');
+		const user = await User.findOne({ _id: user_id._id }).populate('company');
 		const new_job = new Job(job);
 		if (user.company) {
 			new_job.company = user.company;
@@ -192,9 +191,8 @@ const createJob = async (req, res, next) => {
 const logout = async (req, res, next) => {
 	console.log(req.user);
 	try {
-		const user = await User.findOne({ _id: req.user.key });
-		user.removeToken(req.cookies.login);
-		res.clearCookie('login').redirect('/');
+		const user = await User.findByIdAndUpdate(req.user._id, { logged_in: false });
+		res.clearCookie('login').status(200).json({ message: 'User logged out' });
 	} catch (err) {
 		req.err = err;
 		next();
@@ -242,7 +240,7 @@ const managerProfile = async (req, res, next) => {
 			req.body.logo = '';
 		}
 		const comp = new Company(req.body);
-		const user = await User.updateOne({ _id: req.user.key }, { company: comp });
+		const user = await User.updateOne({ _id: req.user._id }, { company: comp });
 		comp.save((err, docs) => {
 			if (err) console.log(err);
 			console.log(docs)

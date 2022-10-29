@@ -1,0 +1,20 @@
+.navbar {
+	top: 60px !important;
+	padding-top: 10rem;
+	bottom: 0;
+	height: 100%;
+	left: 0;
+	width: 5rem !important;
+	overflow: hidden;
+}
+
+@media (max-width: 768px) {
+	.navbar {
+		border-top: 1px solid #a6afa362;
+		position: fixed;
+		margin: 0;
+		left: 0;
+		bottom: 0;
+		width: 100% !important;
+	}
+}
