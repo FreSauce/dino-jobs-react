@@ -6,17 +6,16 @@ import Register from "./pages/Register";
 import CustomRoutes from "./components/CustomRoutes";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import Jobs from "./pages/Jobs";
 
 function App() {
   const { user } = useContext(AuthContext);
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Home />} />
-        {/* <Route element={<CustomRoutes />}> */}
+        <Route path="/" element={<Jobs />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* </Route> */}
         <Route element={<CustomRoutes allowedRoles={"user"} />}>
           <Route path="/interview" element={<InterviewPanel />} />
         </Route>
@@ -24,9 +23,5 @@ function App() {
     </div>
   );
 }
-
-const Home = () => {
-  return <h1>Home</h1>;
-};
 
 export default App;
