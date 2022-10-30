@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 const CustomRoutes = ({ allowedRoles }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  console.log("User: ", user, loading);
+  console.log("User: ", user, location);
   if (loading)
     return (
       <Container
@@ -24,7 +24,7 @@ const CustomRoutes = ({ allowedRoles }) => {
       </Container>
     );
   if (!allowedRoles) return <Outlet />;
-  return allowedRoles == user?.role ? (
+  return allowedRoles.includes(user?.role) ? (
     <Outlet />
   ) : (
     <Navigate to={"/login"} state={{ from: location }} replace />

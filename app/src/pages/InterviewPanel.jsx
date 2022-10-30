@@ -15,9 +15,11 @@ import ChatBox from "../components/ChatBox";
 import RichTextEditor from "@mantine/rte";
 import useWebRTC from "../hooks/useWebRTC";
 import useAuth from "../hooks/useAuth";
+import { useParams } from "react-router-dom";
 
 const InterviewPanel = () => {
-  const [peer, videoRef, chatRef, editorRef] = useWebRTC();
+  const interviewId = useParams();
+  const [peer, videoRef, chatRef, editorRef] = useWebRTC(interviewId);
   const { user, logout } = useAuth();
 
   return (

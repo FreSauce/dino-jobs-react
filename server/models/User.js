@@ -19,7 +19,7 @@ const UserSchema = new Schema({
   },
   email_verified: {
     type: Boolean,
-    default: false
+    default: false,
   },
   password: {
     type: String,
@@ -49,11 +49,12 @@ const UserSchema = new Schema({
   address: String,
   bio: String,
   skills: [String],
-  applied_jobs: [{
-    type: Schema.Types.ObjectId,
-    ref: "Job",
-    unique: true,
-  }
+  applied_jobs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Job",
+      // unique: true,
+    },
   ],
 });
 
