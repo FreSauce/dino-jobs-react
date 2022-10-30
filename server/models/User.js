@@ -38,6 +38,10 @@ const UserSchema = new Schema({
   phone: {
     type: String,
   },
+  logged_in: {
+    type: Boolean,
+    default: false,
+  },
   avatar: {
     type: String,
     default: null,

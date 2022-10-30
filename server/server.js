@@ -29,11 +29,11 @@ app.use("/interview", require("./routes/interviewRouter"));
 app.use("/auth", require("./routes/authRouter"));
 app.use("/", require("./routes/userRouter"));
 
-app.all("*", errorHandler);
+// app.all('*', errorHandler);
 
 app.use((err, req, res, next) => {
   console.log(err);
-  errorHandler(err, req, res, next);
+  errorHandler(req, res, next, err);
 });
 
 app.listen(8080, () => console.log("listening to 8080"));
