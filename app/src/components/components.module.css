@@ -1,11 +1,27 @@
 .navbar {
 	top: 60px !important;
-	padding-top: 10rem;
+	padding-top: 4rem !important;
 	bottom: 0;
 	height: 100%;
 	left: 0;
-	width: 5rem !important;
+	width: 6.5rem !important;
 	overflow: hidden;
+}
+
+.navitem {
+	justify-content: center;
+	align-items: center;
+}
+
+.navitem:hover {
+	cursor: pointer;
+	background-color: gray;
+}
+
+.main_div {
+	margin-left: 7rem;
+	height: 88vh;
+	overflow-y: scroll;
 }
 
 @media (max-width: 768px) {

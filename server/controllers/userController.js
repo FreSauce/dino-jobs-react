@@ -91,8 +91,7 @@ async function signup(user, res) {
 
 async function fetchUser(req, res, next) {
   try {
-    const user = await User.findOne({ _id: req.user.key });
-    res.status(200).json(user);
+    res.status(200).json(req.user);
   } catch (err) {
     req.err = err;
     next();
@@ -255,4 +254,4 @@ const managerProfile = async (req, res, next) => {
     next();
   }
 }
-module.exports = { login, signup, verifyEmail, updateUser, applyJob, createJob, resizeUserPhoto, uploadUserPhoto, logout, deleteUser, getJobApplicants, managerProfile };
+module.exports = { login, signup, verifyEmail, updateUser, fetchUser, applyJob, createJob, resizeUserPhoto, uploadUserPhoto, logout, deleteUser, getJobApplicants, managerProfile };

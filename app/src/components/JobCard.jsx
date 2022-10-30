@@ -1,11 +1,12 @@
-import { 
-  Card, 
-  Image, 
-  Text, 
-  Badge, 
-  Button, 
-  Group } from '@mantine/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  Card,
+  Image,
+  Text,
+  Badge,
+  Button,
+  Group
+} from '@mantine/core';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const JobCard = (props) => {
   return (
@@ -18,11 +19,11 @@ const JobCard = (props) => {
           alt="Norway"
         />
         <Card>
-          <Text  sx={{ fontWeight: '600', fontSize: '1rem' }}>Company Name</Text>
-          <Text  sx={{ fontWeight: '500', fontSize: '0.8rem' }}>Description</Text>
-          <Text  sx={{ fontWeight: '500', fontSize: '0.8rem' }}><FontAwesomeIcon icon="fa-solid fa-users" />69 - 420 Employees</Text>
+          <Text sx={{ fontWeight: '600', fontSize: '1rem' }}>Company Name</Text>
+          <Text sx={{ fontWeight: '500', fontSize: '0.8rem' }}>Description</Text>
+          {/* <Text  sx={{ fontWeight: '500', fontSize: '0.8rem' }}><Fon  tAwesomeIcon icon="fa-solid fa-users" />69 - 420 Employees</Text> */}
         </Card>
-        
+
       </Group>
       <Group >
         <Badge color="green" variant="light">
@@ -35,57 +36,57 @@ const JobCard = (props) => {
           Badge 3
         </Badge>
       </Group>
-      <Group position="apart" withBorder mt="xs" style={{borderRadius: '4px', border: '1px solid #373A40', padding: '0.5rem'}}>
-        <Text style={{"maxWidth": 500}}>
+      <Group position="apart" withBorder mt="xs" style={{ borderRadius: '4px', border: '1px solid #373A40', padding: '0.5rem' }}>
+        <Text style={{ "maxWidth": 500 }}>
           <span style={{ fontWeight: '500', fontSize: '1.0rem' }}>
             Software Engineer .
-          </span>  
-          <span style={{ fontWeight: '400', fontSize: '0.8rem' }}> 
-            Hyderabad, Mumbai, Bangalore    
-          </span> 
+          </span>
+          <span style={{ fontWeight: '400', fontSize: '0.8rem' }}>
+            Hyderabad, Mumbai, Bangalore
+          </span>
         </Text>
         <Group >
-          <Button variant="outline" color="blue"  mt="xs"  radius="md">
+          <Button variant="outline" color="blue" mt="xs" radius="md">
             Save
           </Button>
-          <Button variant="light" color="blue" mt="xs"  radius="md">
+          <Button variant="light" color="blue" mt="xs" radius="md">
             Apply
           </Button>
         </Group>
       </Group>
-      <Group position="apart" withBorder  style={{borderRadius: '4px', border: '1px solid #373A40', padding: '0.5rem'}}>
-        <Text style={{"maxWidth": 500}}>
+      <Group position="apart" withBorder style={{ borderRadius: '4px', border: '1px solid #373A40', padding: '0.5rem' }}>
+        <Text style={{ "maxWidth": 500 }}>
           <span style={{ fontWeight: '500', fontSize: '1.0rem' }}>
             Software Engineer .
-          </span>  
-          <span style={{ fontWeight: '400', fontSize: '0.8rem' }}> 
-            Hyderabad, Mumbai, Bangalore    
-          </span> 
+          </span>
+          <span style={{ fontWeight: '400', fontSize: '0.8rem' }}>
+            Hyderabad, Mumbai, Bangalore
+          </span>
         </Text>
         <Group >
-          <Button variant="outline" color="blue"  mt="xs"  radius="md">
+          <Button variant="outline" color="blue" mt="xs" radius="md">
             Save
           </Button>
-          <Button variant="light" color="blue" mt="xs"  radius="md">
+          <Button variant="light" color="blue" mt="xs" radius="md">
             Apply
           </Button>
         </Group>
       </Group>
-      
-      <Group position="apart" withBorder  style={{borderRadius: '4px', border: '1px solid #373A40', padding: '0.5rem'}}>
-        <Text style={{"maxWidth": 500}}>
+
+      <Group position="apart" withBorder style={{ borderRadius: '4px', border: '1px solid #373A40', padding: '0.5rem' }}>
+        <Text style={{ "maxWidth": 500 }}>
           <span style={{ fontWeight: '500', fontSize: '1.0rem' }}>
             Software Engineer .
-          </span>  
-          <span style={{ fontWeight: '400', fontSize: '0.8rem' }}> 
-            Hyderabad, Mumbai, Bangalore     
-          </span> 
+          </span>
+          <span style={{ fontWeight: '400', fontSize: '0.8rem' }}>
+            Hyderabad, Mumbai, Bangalore
+          </span>
         </Text>
         <Group >
-          <Button variant="outline" color="blue"  mt="xs"  radius="md">
+          <Button variant="outline" color="blue" mt="xs" radius="md">
             Save
           </Button>
-          <Button variant="light" color="blue" mt="xs"  radius="md">
+          <Button variant="light" color="blue" mt="xs" radius="md">
             Apply
           </Button>
         </Group>

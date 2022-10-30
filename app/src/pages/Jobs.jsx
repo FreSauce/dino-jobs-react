@@ -1,31 +1,30 @@
 import { Container, Grid } from '@mantine/core';
 import JobCard from '../components/JobCard';
+import MainWrapper from '../components/MainWrapper';
 
 
 const Jobs = () => {
   return (
-    <div>
-      <Container mt="xl" mb="xl">
+    <MainWrapper>
+      <Container mr={'xs'} ml={'xs'} mt="xl" mb="xl">
         <h1>Featured jobs</h1>
         <br />
-        <Grid>
-          <Grid.Col style={{ maxWidth: 800 }}>
+        <Grid px={25}>
+          <Grid.Col style={{}}>
             <JobCard />
           </Grid.Col>
-          <Grid.Col style={{ maxWidth: 800 }}>
+          <Grid.Col style={{}}>
             <JobCard />
           </Grid.Col>
-          <Grid.Col style={{ maxWidth: 800 }}>
+          <Grid.Col style={{}}>
             <JobCard />
           </Grid.Col>
-          <Grid.Col style={{ maxWidth: 800 }}>
+          <Grid.Col style={{}}>
             <JobCard />
           </Grid.Col>
         </Grid>
       </Container>
-      test
-    </div>
-
+    </MainWrapper>
   )
 }
 
