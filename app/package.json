@@ -12,6 +12,7 @@
     "@mantine/core": "^5.2.5",
     "@mantine/dates": "^5.2.5",
     "@mantine/dropzone": "^5.2.5",
+    "@mantine/ds": "^5.6.3",
     "@mantine/form": "^5.2.5",
     "@mantine/hooks": "^5.2.5",
     "@mantine/modals": "^5.2.5",

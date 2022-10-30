@@ -1,11 +1,14 @@
 import { Container, Grid } from '@mantine/core';
 import JobCard from '../components/JobCard';
-
+import Navbar from '../components/Navbar';
 
 const Jobs = () => {
   return (
-    <div>
-      <Container mt="xl" mb="xl">
+    <div style={{display: 'flex'}} >
+      <Navbar/>
+      <Container sx={{
+        marginLeft: '300px'
+      }} mt="xl" mb="xl" px="xl">
         <h1>Featured jobs</h1>
         <br />
         <Grid>
@@ -23,7 +26,6 @@ const Jobs = () => {
           </Grid.Col>
         </Grid>
       </Container>
-      test
     </div>
 
   )
