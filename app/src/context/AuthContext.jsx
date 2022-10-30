@@ -17,7 +17,7 @@ const AuthContextProvider = ({ children }) => {
 
   const signup = async (userData) => {
     const res = await api.post(
-      "http://localhost:8080/auth/user/register",
+      `http://localhost:8080/auth/${userData.role}/register`,
       userData
     );
     console.log(res);
@@ -26,7 +26,7 @@ const AuthContextProvider = ({ children }) => {
 
   const login = async (userData) => {
     return api
-      .post("http://localhost:8080/auth/user/login", userData)
+      .post(`http://localhost:8080/auth/${userData.role}/login`, userData)
       .then((res) => {
         if (res.status === 200) {
           setToken(res.data.token);

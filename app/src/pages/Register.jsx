@@ -9,7 +9,7 @@ import {
   Checkbox,
   MediaQuery,
 } from "@mantine/core";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import React, { useState } from "react";
 import validator from "validator";
@@ -17,10 +17,11 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { showNotification } from "@mantine/notifications";
 
-const Register = () => {
+const Register = ({ recruiter }) => {
   const [loading, setLoading] = useState(false);
   const { signup, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const form = useForm({
     validateInputOnChange: true,
@@ -50,6 +51,7 @@ const Register = () => {
       email: values.email,
       full_name: values.fullname,
       password: values.password,
+      role: recruiter ? "manager" : "user",
     });
     if (res) {
       showNotification({
@@ -58,13 +60,21 @@ const Register = () => {
         color: "teal",
         autoClose: 2000,
       });
-      navigate("/login");
+      navigate((recruiter ? "/recruiter" : "") + "/login");
+    } else {
+      showNotification({
+        title: "Error",
+        message: "Something went wrong",
+        color: "red",
+        autoClose: 2000,
+      });
     }
     console.log(res);
     setLoading(false);
   };
-
-  if (user) return <Navigate to="/interview" />;
+  if (user) {
+    return <Navigate to={location.state?.from || "/"} replace />;
+  }
 
   return (
     <div
@@ -95,13 +105,13 @@ const Register = () => {
               >
                 <Text
                   sx={{
-                    fontWeight: "900",
+                    fontWeight: "700",
                     fontSize: "2.5rem",
                     textAlign: "center",
                   }}
                   mb={20}
                 >
-                  HubDex
+                  DinoJobs for {recruiter ? "Recruiters" : "Candidates"}
                 </Text>
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                   <Text mb={5} sx={{ fontWeight: "600", fontSize: "1.25rem" }}>

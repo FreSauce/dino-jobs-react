@@ -12,17 +12,15 @@ import {
   CheckIcon,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import React, { useState } from "react";
 import validator from "validator";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { IconX } from "@tabler/icons";
 import useAuth from "../hooks/useAuth";
 
-const Login = () => {
+const Login = ({ recruiter }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, login } = useAuth();
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +44,7 @@ const Login = () => {
     const res = await login({
       email: values.email,
       password: values.password,
+      role: recruiter ? "manager" : "user",
     });
     if (res) {
       showNotification({
@@ -55,7 +54,7 @@ const Login = () => {
         autoClose: 2000,
         // icon: <CheckIcon />,
       });
-      navigate("/interview");
+      navigate(location.state?.from || "/");
     } else {
       showNotification({
         title: "Error",
@@ -69,7 +68,8 @@ const Login = () => {
   };
 
   if (user) {
-    return <Navigate to="/interview" />;
+    console.log(location.state?.from | "/");
+    return <Navigate to={location.state?.from || "/"} replace />;
   }
 
   return (
@@ -102,13 +102,13 @@ const Login = () => {
               >
                 <Text
                   sx={{
-                    fontWeight: "900",
+                    fontWeight: "700",
                     fontSize: "2.5rem",
                     textAlign: "center",
                   }}
                   mb={20}
                 >
-                  HubDex
+                  DinoJobs for {recruiter ? "Recruiters" : "Candidates"}
                 </Text>
                 <form onSubmit={form.onSubmit(handleSubmit)}>
                   <Text mb={5} sx={{ fontWeight: "600", fontSize: "1.25rem" }}>
@@ -121,7 +121,7 @@ const Login = () => {
                     mb={13}
                     withAsterisk
                     label="Email"
-                    placeholder="urmom@gmail.com"
+                    placeholder="johndoe@gmail.com"
                     {...form.getInputProps("email")}
                   />
                   <PasswordInput

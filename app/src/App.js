@@ -15,9 +15,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Jobs />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/recruiter/login" element={<Login recruiter={true} />} />
+        <Route
+          path="/recruiter/register"
+          element={<Register recruiter={true} />}
+        />
         <Route path="/register" element={<Register />} />
-        <Route element={<CustomRoutes allowedRoles={"user"} />}>
-          <Route path="/interview" element={<InterviewPanel />} />
+        <Route element={<CustomRoutes allowedRoles={["user", "manager"]} />}>
+          <Route path="/interview/:interviewId" element={<InterviewPanel />} />
         </Route>
       </Routes>
     </div>
