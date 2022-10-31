@@ -7,16 +7,12 @@ import {
   Badge,
   Button,
   Group,
-  Stepper,
-  TextInput,
-  Radio,
-  Checkbox,
+  Textarea,
   useMantineTheme,
 } from "@mantine/core";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const JobCard = (props) => {
+const JobCard = ({ job, saved, setSavedJobs }) => {
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
   const [active, setActive] = useState(1);
@@ -36,13 +32,7 @@ const JobCard = (props) => {
     setActive((current) => (current > 0 ? current - 1 : current));
   const form = useForm({
     initialValues: {
-      name: "",
-      type: "",
-      description: "",
-      Company: "",
-      location: "",
-      salary: "",
-      experience: "",
+      message: "",
     },
   });
   return (
@@ -61,209 +51,75 @@ const JobCard = (props) => {
         onClose={() => setOpened(false)}
         title="Job Application"
       >
-        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-          <Stepper.Step label="First step">
-            <TextInput
-              label="Name"
-              placeholder="Role*"
-              {...form.getInputProps("name")}
-              required
-            />
-            <TextInput
-              label="Type"
-              placeholder="Type*"
-              {...form.getInputProps("type")}
-              required
-            />
-            <TextInput
-              label="Description"
-              placeholder="Description"
-              {...form.getInputProps("description")}
-            />
-          </Stepper.Step>
-          <Stepper.Step label="Second step">
-            <TextInput
-              label="Company"
-              placeholder="Company*"
-              {...form.getInputProps("company")}
-              required
-            />
-            <TextInput
-              type="Number"
-              label="Salary"
-              placeholder="Salary*"
-              {...form.getInputProps("type")}
-              required
-            />
-            <TextInput
-              label="Location"
-              placeholder="Location"
-              {...form.getInputProps("description")}
-              required
-            />
-          </Stepper.Step>
-          <Stepper.Step label="Final step">
-            <Radio.Group
-              name="Remote or In Person"
-              label="Select your favorite state of work"
-              description=""
-              withAsterisk
-            >
-              <Radio value="true" label="Remote" />
-              <Radio value="false" label="Non-Remote" />
-            </Radio.Group>
-            <Checkbox.Group
-              defaultValue={["Softwate Engineer"]}
-              label="Select your favorite position"
-              description=""
-              withAsterisk
-            >
-              <Checkbox value="Software Engineer" label="Software Engineer" />
-              <Checkbox value="Computer Scientist" label="Computer Scientist" />
-              <Checkbox value="Frontend Developer" label="Frontend Developer" />
-              <Checkbox value="Backend Developer" label="Backend Developer" />
-            </Checkbox.Group>
-            <TextInput
-              type="Number"
-              label="Experience"
-              placeholder="Experience (in years)"
-              {...form.getInputProps("Experience")}
-              required
-            />
-          </Stepper.Step>
-          <Stepper.Completed>
-            Completed, click back button to get to previous step
-          </Stepper.Completed>
-        </Stepper>
+        <Textarea
+          label="Message"
+          placeholder="Message*"
+          {...form.getInputProps("message")}
+          required
+        />
+
         <Group position="center" mt="xl">
-          <Button variant="default" onClick={prevStep}>
-            Back
-          </Button>
-          <Button onClick={nextStep}>{btn}</Button>
+          <Button onClick={nextStep}>Submit</Button>
         </Group>
       </Modal>
       <Card shadow="sm" radius="md" withBorder>
         <Group ml="xs">
           <Image
             src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
-            height={50}
-            width={50}
+            height={70}
+            width={70}
+            radius={5}
             alt="Norway"
           />
           <Card>
             <Text sx={{ fontWeight: "600", fontSize: "1rem" }}>
-              Company Name
+              {job.company}
             </Text>
             <Text sx={{ fontWeight: "500", fontSize: "0.8rem" }}>
-              Description
+              {job.description}
             </Text>
             <Text sx={{ fontWeight: "500", fontSize: "0.8rem" }}>
-              <FontAwesomeIcon icon="fa-solid fa-users" />
-              69 - 420 Employees
+              {job.employees} Employees
             </Text>
           </Card>
         </Group>
         <Group>
-          <Badge color="green" variant="light">
-            Badge 1
-          </Badge>
-          <Badge color="green" variant="light">
-            Badge 2
-          </Badge>
-          <Badge color="green" variant="light">
-            Badge 3
-          </Badge>
+          {job.req_skills.map((skill, index) => (
+            <Badge key={index}>
+              {skill}
+            </Badge>
+          ))}
         </Group>
         <Group
-          position="apart"
-          withBorder
-          mt="xs"
+          position="apart" mt="xs"
           style={{
             borderRadius: "4px",
-            border: "1px solid #373A40",
-            padding: "0.5rem",
-          }}
-        >
-          <Text style={{ maxWidth: 500 }}>
-            <span style={{ fontWeight: "500", fontSize: "1.0rem" }}>
-              Software Engineer .
-            </span>
-            <span style={{ fontWeight: "400", fontSize: "0.8rem" }}>
-              Hyderabad, Mumbai, Bangalore
-            </span>
-          </Text>
-          <Group>
-            <Button variant="outline" color="blue" mt="xs" radius="md">
-              Save
-            </Button>
-            <Button
-              variant="light"
-              color="blue"
-              mt="xs"
-              radius="md"
-              onClick={() => setOpened(true)}
-            >
-              Apply
-            </Button>
-          </Group>
-        </Group>
-        <Group
-          position="apart"
-          withBorder
-          style={{
-            borderRadius: "4px",
-            border: "1px solid #373A40",
-            padding: "0.5rem",
-          }}
-        >
-          <Text style={{ maxWidth: 500 }}>
-            <span style={{ fontWeight: "500", fontSize: "1.0rem" }}>
-              Software Engineer .
-            </span>
-            <span style={{ fontWeight: "400", fontSize: "0.8rem" }}>
-              Hyderabad, Mumbai, Bangalore
-            </span>
-          </Text>
-          <Group>
-            <Button variant="outline" color="blue" mt="xs" radius="md">
-              Save
-            </Button>
-            <Button
-              variant="light"
-              color="blue"
-              mt="xs"
-              radius="md"
-              onClick={() => setOpened(true)}
-            >
-              Apply
-            </Button>
-          </Group>
-        </Group>
 
-        <Group
-          position="apart"
-          withBorder
-          style={{
-            borderRadius: "4px",
-            border: "1px solid #373A40",
             padding: "0.5rem",
           }}
         >
           <Text style={{ maxWidth: 500 }}>
-            <span style={{ fontWeight: "500", fontSize: "1.0rem" }}>
-              Software Engineer .
+            <span style={{ fontWeight: "500", fontSize: "1.0rem", marginRight: '20px' }}>
+              {job.role}
             </span>
             <span style={{ fontWeight: "400", fontSize: "0.8rem" }}>
-              Hyderabad, Mumbai, Bangalore
+              {job.location}
+            </span>
+            <span style={{ marginLeft: '5px' }}>•</span>
+            <span style={{ fontWeight: "400", fontSize: "0.8rem", marginLeft: '10px' }}>
+              ${job.salary}
             </span>
           </Text>
           <Group>
-            <Button variant="outline" color="blue" mt="xs" radius="md">
+            {saved ?
+              <Button variant="outline" mt="xs" radius="md" onClick={() => setSavedJobs(prev => prev.filter((j) => j.id !== job.id))}>Remove</Button>
+              : <Button variant="outline" mt="xs" radius="md" onClick={() => setSavedJobs(prev => [...prev, job])}>Save</Button>}
+            {/* <Button variant="outline" mt="xs" radius="md" onClick={() => setSavedJobs(prev => [...prev, job])}>
               Save
-            </Button>
+            </Button> */}
             <Button
               variant="light"
-              color="blue"
+              // color={'grape.6'}
               mt="xs"
               radius="md"
               onClick={() => setOpened(true)}

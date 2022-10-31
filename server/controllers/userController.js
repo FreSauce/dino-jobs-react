@@ -91,8 +91,7 @@ async function signup(user, res) {
 
 async function fetchUser(req, res, next) {
   try {
-    const user = await User.findOne({ _id: req.user.key });
-    res.status(200).json(user);
+    res.status(200).json(req.user);
   } catch (err) {
     req.err = err;
     next();
@@ -265,8 +264,8 @@ module.exports = {
   login,
   signup,
   verifyEmail,
-  fetchUser,
   updateUser,
+  fetchUser,
   applyJob,
   createJob,
   resizeUserPhoto,

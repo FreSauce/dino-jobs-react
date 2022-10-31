@@ -1,20 +1,14 @@
-import { useState } from "react";
-import { createStyles, Navbar, Group, Code } from "@mantine/core";
+import { useEffect, useState } from "react";
+import { createStyles, Navbar, Group } from "@mantine/core";
+import { Link, useLocation } from "react-router-dom";
 import {
-  IconBellRinging,
   IconHome,
-  IconJob,
   IconUser,
   IconKey,
   IconSettings,
-  Icon2fa,
-  IconDatabaseImport,
   IconReceipt2,
-  IconSwitchHorizontal,
   IconLogout,
 } from "@tabler/icons";
-import { MantineLogo } from "@mantine/ds";
-import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -49,7 +43,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
         theme.colorScheme === "dark"
           ? theme.colors.dark[1]
           : theme.colors.gray[7],
-      padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
+      padding: `${theme.spacing.md}px ${theme.spacing.sm}px`,
       borderRadius: theme.radius.sm,
       fontWeight: 500,
 
@@ -95,33 +89,21 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "", label: "Home", icon: IconHome },
-  { link: "", label: "Jobs", icon: IconReceipt2 },
-  { link: "", label: "Profile", icon: IconUser },
-  { link: "", label: "Interview", icon: IconKey },
-  { link: "", label: "Settings", icon: IconSettings },
+  { link: "/", label: "Home", icon: IconHome },
+  { link: "/jobs", label: "Jobs", icon: IconReceipt2 },
+  { link: "/interview", label: "Interview", icon: IconKey },
+  { link: "/saved-jobs", label: "Saved Jobs", icon: IconReceipt2 },
+  { link: "/settings", label: "Settings", icon: IconSettings },
 ];
 
 const SideBar = () => {
+  const location = useLocation();
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState("Billing");
+  const [active, setActive] = useState();
 
-  const links = data.map((item) => (
-    <Link
-      className={cx(classes.link, {
-        [classes.linkActive]: item.label === active,
-      })}
-      href={item.link}
-      key={item.label}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(item.label);
-      }}
-    >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
-      <span>{item.label}</span>
-    </Link>
-  ));
+  useEffect(() => {
+    setActive(location.pathname);
+  }, [location]);
 
   return (
     <Navbar fixed={true} width={{ sm: 250 }} p="md">
@@ -129,27 +111,35 @@ const SideBar = () => {
         <Group className={classes.header} position="apart">
           <h1>Dino Jobs</h1>
         </Group>
-        {links}
+        {data.map((item, index) => (
+          <Link
+            key={item.label}
+            className={cx(classes.link, {
+              [classes.linkActive]: item.link === active,
+            })}
+            to={item.link}
+          >
+            <item.icon className={classes.linkIcon} stroke={1.5} />
+            <span>{item.label}</span>
+          </Link>
+        ))}
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <a
-          href="#"
-          className={classes.link}
-          onClick={(event) => event.preventDefault()}
+        <Link
+          to={"/profile"}
+          className={cx(classes.link, {
+            [classes.linkActive]: "/profile" === active,
+          })}
         >
-          <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-          <span>Change account</span>
-        </a>
+          <IconUser className={classes.linkIcon} stroke={1.5} />
+          <span>Profile</span>
+        </Link>
 
-        <a
-          href="#"
-          className={classes.link}
-          onClick={(event) => event.preventDefault()}
-        >
+        <Link to={"/logout"} className={classes.link}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
-        </a>
+        </Link>
       </Navbar.Section>
     </Navbar>
   );

@@ -13,7 +13,7 @@ root.render(
     <MantineProvider
       withGlobalStyles
       withNormalizeCSS
-      theme={{ colorScheme: "dark" }}
+      theme={{ colorScheme: "dark", primaryColor: 'teal', primaryShade: 9 }}
     >
       <NotificationsProvider>
         <AuthContextProvider>

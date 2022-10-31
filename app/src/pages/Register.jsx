@@ -13,7 +13,6 @@ import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import React, { useState } from "react";
 import validator from "validator";
-import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import { showNotification } from "@mantine/notifications";
 
@@ -30,9 +29,11 @@ const Register = ({ recruiter }) => {
       email: "",
       password: "",
       confirmPassword: "",
+      company: '',
       toc: false,
     },
     validate: {
+      fullname: (value) => (value !== '' ? null : 'Full Name is required'),
       email: (value) => (validator.isEmail(value) ? null : "Invalid Email"),
       password: (value) =>
         value.length >= 8
@@ -40,6 +41,7 @@ const Register = ({ recruiter }) => {
           : "Password must be at least 8 characters long",
       confirmPassword: (value, { password }) =>
         value === password ? null : "Passwords doesnt match",
+      company: (value) => (recruiter ? value ? null : 'Company name should be specified' : null),
       toc: (value) =>
         value ? null : "You must agree to our terms and conditions",
     },
@@ -134,6 +136,13 @@ const Register = ({ recruiter }) => {
                     placeholder="urmom@gmail.com"
                     {...form.getInputProps("email")}
                   />
+                  {recruiter ? <TextInput
+                    mb={13}
+                    withAsterisk
+                    label="Company"
+                    placeholder="urmom"
+                    {...form.getInputProps('company')}
+                  /> : null}
                   <PasswordInput
                     mb={13}
                     withAsterisk

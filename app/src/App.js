@@ -4,24 +4,29 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CustomRoutes from "./components/CustomRoutes";
-import { useContext } from "react";
-import { AuthContext } from "./context/AuthContext";
+import Jobs from "./pages/Jobs";
+import Profile from "./pages/Profile";
+import useAuth from "./hooks/useAuth";
+import ManJobs from "./pages/ManJobs";
 import Home from "./pages/Home";
 
 function App() {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useAuth();
+
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Home />} />
-
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/recruiter/login" element={<Login recruiter={true} />} />
         <Route
           path="/recruiter/register"
           element={<Register recruiter={true} />}
         />
-        <Route path="/register" element={<Register />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Jobs />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/jobs" element={<ManJobs />} />
         <Route element={<CustomRoutes allowedRoles={["user", "manager"]} />}>
           <Route path="/interview/:interviewId" element={<InterviewPanel />} />
         </Route>
