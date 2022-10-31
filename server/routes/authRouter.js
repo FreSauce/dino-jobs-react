@@ -5,12 +5,12 @@ const authRouter = Router();
 
 authRouter.post("/:role/login", (req, res, next) => {
   login(req, req.params.role, res)
-    .then(([token, user]) => {
+    .then(token => {
       if (token) {
         res
           .cookie("login", token)
           .status(200)
-          .json({ message: "Login Successful", token: token, user: user });
+          .json({ message: "Login Successful", token: token });
       } else {
         req.err = "Invalid Credentials";
         next();

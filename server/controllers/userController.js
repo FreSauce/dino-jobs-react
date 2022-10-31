@@ -39,7 +39,7 @@ const resizeUserPhoto = async (req, res, next) => {
       .jpeg({ quality: 90 })
       .toFile(`./public/uploads/${req.file.filename}`);
     next();
-  } catch (err) {}
+  } catch (err) { }
 };
 
 const uploadUserPhoto = upload.single("avatar");
@@ -53,7 +53,7 @@ const mailServer = nodemailer.createTransport({
   },
 });
 
-async function login(req, flag, res) {
+function login(req, flag, res) {
   const { email, password, is_checked } = req.body;
   return User.findOne({ email })
     .then((user) => {
@@ -62,10 +62,11 @@ async function login(req, flag, res) {
       }
       return user.comparePassword(password);
     })
-    .then(async (user) => {
+    .then((user) => {
       if (user && user.role === flag) {
-        let hg = await User.findByIdAndUpdate(user._id, { logged_in: true });
-        return user.generateToken();
+        return User.findByIdAndUpdate(user._id, { logged_in: true }).then(res => {
+          return user.generateToken();
+        });
       } else res.status(400).send("PASSWORD DOESNT MATCH");
     })
     .catch((err) => {
@@ -89,12 +90,13 @@ async function signup(user, res) {
     });
 }
 
-async function fetchUser(req, res, next) {
+function fetchUser(req, res, next) {
   try {
     res.status(200).json(req.user);
   } catch (err) {
     req.err = err;
-    next();
+    console.log(err);
+    next(err);
   }
 }
 
@@ -227,7 +229,7 @@ const deleteUser = async (req, res, next) => {
     } else {
       res.status(400).json({ result: "Unauthorized" });
     }
-  } catch (err) {}
+  } catch (err) { }
 };
 
 const getJobApplicants = async (req, res, next) => {

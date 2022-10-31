@@ -1,8 +1,15 @@
 import { Button, Container, Group, Stack } from "@mantine/core";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const Home = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  console.log(user);
+  if (user) {
+    navigate('/jobs', { replace: true });
+  }
   return (
     <div>
       <Container

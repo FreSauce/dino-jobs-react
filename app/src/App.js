@@ -1,4 +1,5 @@
 import "./App.css";
+import { useState } from 'react'
 import InterviewPanel from "./pages/InterviewPanel";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
@@ -9,6 +10,7 @@ import Profile from "./pages/Profile";
 import useAuth from "./hooks/useAuth";
 import ManJobs from "./pages/ManJobs";
 import Home from "./pages/Home";
+import SavedJobs from './pages/SavedJobs'
 
 function App() {
   const { user, loading } = useAuth();
@@ -24,12 +26,11 @@ function App() {
           path="/recruiter/register"
           element={<Register recruiter={true} />}
         />
-        <Route path="/home" element={<Home />} />
-        <Route path="/" element={<Jobs />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/jobs" element={<ManJobs />} />
-        <Route path="/saved-jobs" element={<SavedJobs savedJobs={savedJobs} setSavedJobs={setSavedJobs} />} />
+        <Route path="/" element={<Home />} />
         <Route element={<CustomRoutes allowedRoles={["user", "manager"]} />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/saved-jobs" element={<SavedJobs savedJobs={savedJobs} setSavedJobs={setSavedJobs} />} />
           <Route path="/interview/:interviewId" element={<InterviewPanel />} />
         </Route>
       </Routes>
