@@ -26,6 +26,20 @@ code {
   animation: bg-animation 10s infinite alternate;
 }
 
+*::-webkit-scrollbar {
+  width: 7px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 15px;
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  background-color: rgb(53, 52, 52);
+}
+
 .custom-scroll::-webkit-scrollbar {
   width: 7px;
 }

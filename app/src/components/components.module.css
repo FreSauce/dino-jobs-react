@@ -24,6 +24,10 @@
 	overflow-y: scroll;
 }
 
+.image:hover {
+	cursor: pointer;
+}
+
 @media (max-width: 768px) {
 	.navbar {
 		border-top: 1px solid #a6afa362;

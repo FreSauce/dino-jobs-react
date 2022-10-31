@@ -41,7 +41,7 @@ const Register = ({ recruiter }) => {
           : "Password must be at least 8 characters long",
       confirmPassword: (value, { password }) =>
         value === password ? null : "Passwords doesnt match",
-      company: (value) => (value),
+      company: (value) => (recruiter ? value ? null : 'Company name should be specified' : null),
       toc: (value) =>
         value ? null : "You must agree to our terms and conditions",
     },
@@ -136,6 +136,13 @@ const Register = ({ recruiter }) => {
                     placeholder="urmom@gmail.com"
                     {...form.getInputProps("email")}
                   />
+                  {recruiter ? <TextInput
+                    mb={13}
+                    withAsterisk
+                    label="Company"
+                    placeholder="urmom"
+                    {...form.getInputProps('company')}
+                  /> : null}
                   <PasswordInput
                     mb={13}
                     withAsterisk

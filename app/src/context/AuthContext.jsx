@@ -7,7 +7,6 @@ import { authInitialState } from "../utils/constants";
 export const AuthContext = createContext();
 
 const AuthContextProvider = ({ children }) => {
-  // const { state, dispatch } = useReducer(authReducer);
   const [user, setUser] = useState(null);
   const [token, setToken] = useLocalState("token");
   const [loading, setLoading] = useState(true);
