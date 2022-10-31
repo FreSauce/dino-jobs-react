@@ -5,12 +5,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CustomRoutes from "./components/CustomRoutes";
 import Jobs from "./pages/Jobs";
-import Profile from './pages/Profile';
+import Profile from "./pages/Profile";
 import useAuth from "./hooks/useAuth";
 import ManJobs from "./pages/ManJobs";
-import SavedJobs from "./pages/SavedJobs";
-import { useState } from "react";
-
+import Home from "./pages/Home";
 
 function App() {
   const { user, loading } = useAuth();
@@ -26,7 +24,8 @@ function App() {
           path="/recruiter/register"
           element={<Register recruiter={true} />}
         />
-        <Route path='/' element={<Jobs savedJobs={savedJobs} setSavedJobs={setSavedJobs} />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Jobs />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/jobs" element={<ManJobs />} />
         <Route path="/saved-jobs" element={<SavedJobs savedJobs={savedJobs} setSavedJobs={setSavedJobs} />} />

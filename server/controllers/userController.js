@@ -39,7 +39,7 @@ const resizeUserPhoto = async (req, res, next) => {
       .jpeg({ quality: 90 })
       .toFile(`./public/uploads/${req.file.filename}`);
     next();
-  } catch (err) { }
+  } catch (err) {}
 };
 
 const uploadUserPhoto = upload.single("avatar");
@@ -58,7 +58,7 @@ async function login(req, flag, res) {
   return User.findOne({ email })
     .then((user) => {
       if (!user) {
-        res.status(400).send({ message: 'User not found' })
+        res.status(400).send({ message: "User not found" });
       }
       return user.comparePassword(password);
     })
@@ -66,11 +66,11 @@ async function login(req, flag, res) {
       if (user && user.role === flag) {
         let hg = await User.findByIdAndUpdate(user._id, { logged_in: true });
         return user.generateToken();
-      } else res.status(400).send('PASSWORD DOESNT MATCH');
+      } else res.status(400).send("PASSWORD DOESNT MATCH");
     })
     .catch((err) => {
       console.log(err);
-      throw 'Internal Server Error';
+      throw "Internal Server Error";
     });
 }
 
@@ -100,9 +100,11 @@ async function fetchUser(req, res, next) {
 
 async function updateUser(req, res, next) {
   req.body.avatar = req.file.filename;
-  console.log(req.body)
+  console.log(req.body);
   try {
-    let doc = await User.findOneAndUpdate({ _id: req.user.key }, req.body, { new: false });
+    let doc = await User.findOneAndUpdate({ _id: req.user.key }, req.body, {
+      new: false,
+    });
     console.log(doc);
   } catch (err) {
     req.err = err;
@@ -161,10 +163,14 @@ async function applyJob(req, res, next) {
     const user = req.user;
     Job.findOne({ _id: job._id }, (err, docs) => {
       console.log(docs);
-      User.updateOne({ _id: user.key.toString() }, { $push: { applied_jobs: docs } }, (err, docs) => {
-        console.log(docs);
-        res.status(200).json({ result: "Job Applied" });
-      });
+      User.updateOne(
+        { _id: user.key.toString() },
+        { $push: { applied_jobs: docs } },
+        (err, docs) => {
+          console.log(docs);
+          res.status(200).json({ result: "Job Applied" });
+        }
+      );
     });
     // console.log(new_user);
   } catch (err) {
@@ -177,34 +183,34 @@ const createJob = async (req, res, next) => {
   const job = req.body;
   const user_id = req.user;
   try {
-    job.remote = job.remote === 'True' ? true : false;
-    const user = await User.findOne({ _id: user_id.key }).populate('company');
+    job.remote = job.remote === "True" ? true : false;
+    const user = await User.findOne({ _id: user_id.key }).populate("company");
     const new_job = new Job(job);
     if (user.company) {
       new_job.company = user.company;
       await new_job.save((err, docs) => {
-        if (err) next('Internal Server Error');
-        res.status(200).json({ result: 'Job Created' });
+        if (err) next("Internal Server Error");
+        res.status(200).json({ result: "Job Created" });
       });
     } else {
-      next('User doesnt have a company');
+      next("User doesnt have a company");
     }
   } catch (err) {
     next(err);
   }
-}
+};
 
 const logout = async (req, res, next) => {
   console.log(req.user);
   try {
     const user = await User.findOne({ _id: req.user.key });
     user.removeToken(req.cookies.login);
-    res.clearCookie('login').redirect('/');
+    res.clearCookie("login").redirect("/");
   } catch (err) {
     req.err = err;
     next();
   }
-}
+};
 
 const deleteUser = async (req, res, next) => {
   const { role, user } = req.params;
@@ -221,7 +227,7 @@ const deleteUser = async (req, res, next) => {
     } else {
       res.status(400).json({ result: "Unauthorized" });
     }
-  } catch (err) { }
+  } catch (err) {}
 };
 
 const getJobApplicants = async (req, res, next) => {
@@ -241,17 +247,31 @@ const managerProfile = async (req, res, next) => {
       delete req.body.avatar;
       delete req.body.phone;
       delete req.body.bio;
-      req.body.logo = '';
+      req.body.logo = "";
     }
     const comp = new Company(req.body);
     const user = await User.updateOne({ _id: req.user.key }, { company: comp });
     comp.save((err, docs) => {
       if (err) console.log(err);
-      console.log(docs)
+      console.log(docs);
     });
   } catch (err) {
     req.err = err;
     next();
   }
-}
-module.exports = { login, signup, verifyEmail, updateUser, fetchUser, applyJob, createJob, resizeUserPhoto, uploadUserPhoto, logout, deleteUser, getJobApplicants, managerProfile };
+};
+module.exports = {
+  login,
+  signup,
+  verifyEmail,
+  updateUser,
+  fetchUser,
+  applyJob,
+  createJob,
+  resizeUserPhoto,
+  uploadUserPhoto,
+  logout,
+  deleteUser,
+  getJobApplicants,
+  managerProfile,
+};
