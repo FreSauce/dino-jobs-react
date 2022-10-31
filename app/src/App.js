@@ -6,14 +6,15 @@ import Register from "./pages/Register";
 import CustomRoutes from "./components/CustomRoutes";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
-import Jobs from "./pages/Jobs";
+import Home from "./pages/Home";
 
 function App() {
   const { user } = useContext(AuthContext);
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Jobs />} />
+        <Route path="/" element={<Home />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/recruiter/login" element={<Login recruiter={true} />} />
         <Route
