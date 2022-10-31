@@ -14,8 +14,10 @@ const SavedJobs = ({ savedJobs, setSavedJobs }) => {
 					<h1>Saved jobs</h1>
 					<br />
 					<Grid px={25}>
+					{console.log('From SavedJobs.jsx', savedJobs)}
 						{savedJobs?.map((job, index) => (
 							<Grid.Col key={index}>
+								
 								<JobCard job={job} saved={true} setSavedJobs={setSavedJobs} />
 							</Grid.Col>
 						))}

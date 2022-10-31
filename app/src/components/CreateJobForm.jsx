@@ -55,9 +55,6 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 		if (active === 2) {
 			setBtn("Submit");
 		}
-		else {
-			setBtn("Next Step");
-		}
 		setActive((current) => (current < 3 ? current + 1 : current));
 	};
 	const prevStep = () =>

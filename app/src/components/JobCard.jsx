@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 
 const JobCard = ({ job, saved, setSavedJobs }) => {
+  console.log(saved)
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
   const [active, setActive] = useState(1);

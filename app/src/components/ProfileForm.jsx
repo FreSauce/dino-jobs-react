@@ -18,16 +18,12 @@ const ProfileForm = () => {
 	const [btn, setBtn] = useState("Next Step");
 	const imageRef = useRef(null);
 	const nextStep = () => {
+		
 		if (btn === "Submit") {
-			form.onSubmit((values) => {
-				console.log(values);
-			});
+			console.log(form.values);
 		}
 		if (active === 2) {
 			setBtn("Submit");
-		}
-		else {
-			setBtn("Next Step");
 		}
 		setActive((current) => (current < 3 ? current + 1 : current));
 	};
@@ -146,7 +142,7 @@ const ProfileForm = () => {
 
 			<Group position="center" mt="xl">
 				<Button variant="default" onClick={prevStep}>Back</Button>
-				<Button onClick={nextStep}>Next step</Button>
+				<Button onClick={nextStep}>{btn}</Button>
 			</Group>
 		</>
 	);

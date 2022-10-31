@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 const CustomRoutes = ({ allowedRoles }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
-  console.log("User: ", user, location);
+  //console.log("User: ", user, location);
   if (loading)
     return (
       <Container

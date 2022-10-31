@@ -4,10 +4,11 @@ import MainWrapper from '../components/MainWrapper';
 import { IconChevronDown } from '@tabler/icons';
 import { jobs } from '../utils/constants';
 import useAuth from '../hooks/useAuth';
-import { useEffect, useState } from 'react';
+import {savedJobsContext} from '../App'
+import React, { useState, useEffect } from 'react'
 
-
-const Jobs = ({ savedJobs, setSavedJobs }) => {
+const Jobs = () => {
+  const { savedJobs, setSavedJobs } = React.useContext(savedJobsContext);
   const { user } = useAuth();
   console.log("hehe", setSavedJobs)
   return (
