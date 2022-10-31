@@ -25,7 +25,7 @@ const h_jobs = [{
 }, {
 	company: 'Company',
 	role: 'Software Engineer',
-	description: 'hehe im desc',
+	description: 'FU',
 	location: 'Banglore',
 	salary: 90000,
 	remote: true,

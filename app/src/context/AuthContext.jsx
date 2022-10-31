@@ -23,6 +23,14 @@ const AuthContextProvider = ({ children }) => {
     return res.data;
   };
 
+  const updateUser = (user) => {
+    setUser(prev => ({ ...prev, user }));
+  }
+
+  const saveJobs = (job) => {
+    setUser(prev => ({ ...prev, savedJobs: [...prev.savedJobs, job] }));
+  }
+
   const login = async (userData) => {
     return api
       .post(`http://localhost:8080/auth/${userData.role}/login`, userData)
@@ -79,7 +87,7 @@ const AuthContextProvider = ({ children }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ user, loading, signup, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, signup, login, logout, saveJobs, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

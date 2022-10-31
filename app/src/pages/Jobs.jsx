@@ -7,14 +7,9 @@ import useAuth from '../hooks/useAuth';
 import { useEffect, useState } from 'react';
 
 
-const Jobs = () => {
+const Jobs = ({ savedJobs, setSavedJobs }) => {
   const { user } = useAuth();
-  const [savedJobs, setSavedJobs] = useState([]);
-
-  useEffect(() => {
-    setSavedJobs(user?.savedJobs);
-  }, [user])
-
+  console.log("hehe", setSavedJobs)
   return (
     <MainWrapper>
       <div style={{ display: "flex" }}>
@@ -24,7 +19,7 @@ const Jobs = () => {
           <Grid px={25}>
             {jobs.map((job, index) => (
               <Grid.Col key={index}>
-                <JobCard job={job} saved={false} setSavedJobs={setSavedJobs} />
+                <JobCard job={job} saved={savedJobs?.find(j => j.id === job.id)} setSavedJobs={setSavedJobs} />
               </Grid.Col>
             ))}
           </Grid>

@@ -8,10 +8,13 @@ import Jobs from "./pages/Jobs";
 import Profile from './pages/Profile';
 import useAuth from "./hooks/useAuth";
 import ManJobs from "./pages/ManJobs";
+import SavedJobs from "./pages/SavedJobs";
+import { useState } from "react";
 
 
 function App() {
   const { user, loading } = useAuth();
+  const [savedJobs, setSavedJobs] = useState([]);
 
   return (
     <div className="App">
@@ -23,9 +26,10 @@ function App() {
           path="/recruiter/register"
           element={<Register recruiter={true} />}
         />
-        <Route path='/' element={<Jobs />} />
+        <Route path='/' element={<Jobs savedJobs={savedJobs} setSavedJobs={setSavedJobs} />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/jobs" element={<ManJobs />} />
+        <Route path="/saved-jobs" element={<SavedJobs savedJobs={savedJobs} setSavedJobs={setSavedJobs} />} />
         <Route element={<CustomRoutes allowedRoles={["user", "manager"]} />}>
           <Route path="/interview/:interviewId" element={<InterviewPanel />} />
         </Route>

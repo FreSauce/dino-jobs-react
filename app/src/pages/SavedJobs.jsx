@@ -5,21 +5,16 @@ import useAuth from '../hooks/useAuth';
 import JobCard from '../components/JobCard';
 
 
-const SavedJobs = () => {
-	const { user } = useAuth();
-	const [savedJobs, setSavedJobs] = useState();
+const SavedJobs = ({ savedJobs, setSavedJobs }) => {
 
-	useEffect(() => {
-		setSavedJobs(user?.savedJobs);
-	}, [user])
 	return (
 		<MainWrapper>
 			<div style={{ display: "flex" }}>
 				<Container mt="xl" mb="xl" >
-					<h1>Featured jobs</h1>
+					<h1>Saved jobs</h1>
 					<br />
 					<Grid px={25}>
-						{savedJobs.map((job, index) => (
+						{savedJobs?.map((job, index) => (
 							<Grid.Col key={index}>
 								<JobCard job={job} saved={true} setSavedJobs={setSavedJobs} />
 							</Grid.Col>

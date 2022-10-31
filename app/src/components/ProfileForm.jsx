@@ -37,7 +37,6 @@ const ProfileForm = () => {
 		initialValues: {
 			fullname: "",
 			email: "",
-			password: "",
 			company: "",
 			phone: "",
 			address: "",
