@@ -49,7 +49,7 @@ const chatDB = [
 ];
 
 const ChatBox = () => {
-  const [activeTab, setActiveTab] = useState("chat");
+  const [activeTab, setActiveTab] = useState("evaluation");
   const [chats, setChats] = useState([]);
   const containerRef = useRef();
   const chatboxRef = useRef();

@@ -8,7 +8,7 @@ const Home = () => {
   const navigate = useNavigate();
   console.log(user);
   if (user) {
-    navigate('/jobs', { replace: true });
+    navigate("/jobs", { replace: true });
   }
   return (
     <div>
@@ -63,22 +63,22 @@ const Home = () => {
               we provide the best interview scheduling and handling system.
             </p>
             <Group py="md">
-              <Button variant="filled" color="white" size="lg">
-                <Link
-                  to="/login"
-                  style={{ textDecoration: "none", color: "#eee" }}
-                >
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "#eee" }}
+              >
+                <Button variant="filled" color="white" size="lg">
                   Get Hired
-                </Link>
-              </Button>
-              <Button variant="light" color="white" size="lg">
-                <Link
-                  to="/recruiter/login"
-                  style={{ textDecoration: "none", color: "#eee" }}
-                >
+                </Button>
+              </Link>
+              <Link
+                to="/recruiter/login"
+                style={{ textDecoration: "none", color: "#eee" }}
+              >
+                <Button variant="light" color="white" size="lg">
                   Hire Talents
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </Group>
           </Stack>
           <Stack></Stack>

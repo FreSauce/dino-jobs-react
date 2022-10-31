@@ -9,6 +9,7 @@ import {
   IconReceipt2,
   IconLogout,
 } from "@tabler/icons";
+import useAuth from "../hooks/useAuth";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -91,12 +92,13 @@ const useStyles = createStyles((theme, _params, getRef) => {
 const data = [
   { link: "/home", label: "Home", icon: IconHome },
   { link: "/jobs", label: "Jobs", icon: IconReceipt2 },
-  { link: "/interview", label: "Interview", icon: IconKey },
+  { link: "/interview/exampleid", label: "Interview", icon: IconKey },
   { link: "/saved-jobs", label: "Saved Jobs", icon: IconReceipt2 },
   { link: "/settings", label: "Settings", icon: IconSettings },
 ];
 
 const SideBar = () => {
+  const {user, logout} = useAuth();
   const location = useLocation();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState();
@@ -138,7 +140,7 @@ const SideBar = () => {
           <span>Profile</span>
         </Link>
 
-        <Link to={"/logout"} className={classes.link}>
+        <Link onClick={logout} className={classes.link}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
         </Link>
