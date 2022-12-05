@@ -19,6 +19,8 @@ import JobHandler from "./components/JobHandler";
 import Interview from "./pages/Interview";
 import InterviewHandler from "./components/InterviewHandler";
 
+const savedJobsContext = createContext();
+
 function App() {
   const { user, loading } = useSelector(state => state.auth)
   const { saved_jobs } = useSelector(state => state.user);
@@ -67,4 +69,5 @@ function App() {
   );
 }
 
-export default App;
+export { App, savedJobsContext }
+

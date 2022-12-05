@@ -88,9 +88,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "/", label: "Home", icon: IconHome },
+  { link: "/home", label: "Home", icon: IconHome },
   { link: "/jobs", label: "Jobs", icon: IconReceipt2 },
-  { link: "/interview", label: "Interview", icon: IconKey },
+  { link: "/interview/exampleid", label: "Interview", icon: IconKey },
   { link: "/saved-jobs", label: "Saved Jobs", icon: IconReceipt2 },
   { link: "/applied-jobs", label: "Applied Jobs", icon: IconReceipt2 },
 ];
@@ -117,12 +117,14 @@ const SideBar = () => {
           <h1>Dino Jobs</h1>
         </Group>
         {data.map((item, index) => (
+
           <Link
             key={item.label}
             className={cx(classes.link, {
               [classes.linkActive]: item.link === active,
             })}
             to={item.link}
+
           >
             <item.icon className={classes.linkIcon} stroke={1.5} />
             <span>{item.label}</span>

@@ -20,16 +20,12 @@ const ProfileForm = () => {
 	const imageContainer = useRef(null);
 
 	const nextStep = () => {
+		
 		if (btn === "Submit") {
-			form.onSubmit((values) => {
-				console.log(values);
-			});
+			console.log(form.values);
 		}
 		if (active === 3) {
 			setBtn("Submit");
-		}
-		else {
-			setBtn("Next Step");
 		}
 		setActive((current) => (current < 3 ? current + 1 : current));
 	};
