@@ -1,4 +1,4 @@
-const { User, Job, Company } = require("../models");
+const { User, Job, Company, Invites } = require("../models");
 const nodemailer = require("nodemailer");
 const multer = require("multer");
 const { uuid } = require("uuidv4");
@@ -65,38 +65,60 @@ function login(req, flag, res) {
     .then((user) => {
       if (user && user.role === flag) {
         return User.findByIdAndUpdate(user._id, { logged_in: true }).then(res => {
-          return user.generateToken();
+          return { user, token: user.generateToken() };
         });
-      } else res.status(400).send("PASSWORD DOESNT MATCH");
+      } else res.status(401).send("User doesnt have permissions");
     })
     .catch((err) => {
       console.log(err);
-      throw "Internal Server Error";
+      throw 'User credentials are incorrect';
     });
 }
 
 async function signup(user, res) {
   const new_user = new User(user);
-  console.log(new_user);
-  return new_user
-    .save()
-    .then(async (user) => {
-      res.status(200).json({ result: "Mail Sent" });
-      await sendEmail(user);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(400).json({ result: "User already exists" });
-    });
+  try {
+    const svu = new_user.save();
+    res.status(200).json({ result: "Mail Sent" });
+    const token = new_user.generateToken();
+    const html = "<h2>Please click the link below to verify your email</h2>" +
+      '<a href="http://localhost:8080/auth/verify/' +
+      token +
+      '">Verify Here</a>';
+    await sendEmail(user.email, html, 'Please confirm your Email account');
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ result: Object.keys(err.errors).map(e => err.errors[e].message).pop() });
+  }
 }
 
-function fetchUser(req, res, next) {
+async function manSignup(user, company, res) {
+  const new_user = new User(user);
+  const new_company = new Company(company);
+  console.log(new_user);
+  try {
+    const svc = await new_company.save();
+    new_user.company = svc._id;
+    const svu = new_user.save();
+    res.status(200).json({ result: "Mail Sent" });
+    const token = new_user.generateToken();
+    const html = "<h2>Please click the link below to verify your email</h2>" +
+      '<a href="http://localhost:8080/auth/verify/' +
+      token +
+      '">Verify Here</a>';
+    await sendEmail(user.email, html, 'Please confirm your Email account');
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ result: Object.keys(err.errors).map(e => err.errors[e].message).pop() });
+  }
+}
+
+async function fetchUser(req, res, next) {
   try {
     res.status(200).json(req.user);
   } catch (err) {
     req.err = err;
-    console.log(err);
-    next(err);
+    next({ message: err, status: 500 });
   }
 }
 
@@ -114,29 +136,19 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function sendEmail(user) {
-  await User.findOne({ email: user.email }).then(async (user) => {
-    if (!user) {
-      throw new Error("User not found");
+async function sendEmail(email, html, sub) {
+  const mailOptions = {
+    from: "rookievesper@gmail.com",
+    to: email,
+    subject: sub,
+    html: html,
+  };
+  mailServer.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(info)
     }
-    const token = user.generateToken();
-    html =
-      "<h2>Please click the link below to verify your email</h2>" +
-      '<a href="http://localhost:8080/auth/verify/' +
-      token +
-      '">Verify Here</a>';
-    const mailOptions = {
-      from: "rookievesper@gmail.com",
-      to: user.email,
-      subject: "Please confirm your Email account",
-      html: html,
-    };
-    mailServer.sendMail(mailOptions, (err, info) => {
-      if (err) {
-        console.log(err);
-      } else {
-      }
-    });
   });
 }
 
@@ -161,23 +173,17 @@ async function verifyEmail(token) {
 
 async function applyJob(req, res, next) {
   try {
-    const job = req.body;
+    const { jobId, msg } = req.body;
+    console.log(jobId, msg);
     const user = req.user;
-    Job.findOne({ _id: job._id }, (err, docs) => {
-      console.log(docs);
-      User.updateOne(
-        { _id: user.key.toString() },
-        { $push: { applied_jobs: docs } },
-        (err, docs) => {
-          console.log(docs);
-          res.status(200).json({ result: "Job Applied" });
-        }
-      );
-    });
-    // console.log(new_user);
+    const job = await Job.findById(jobId).populate('company');
+    const us = await User.updateOne({ _id: user.key.toString() }, { $push: { applied_jobs: job._id } });
+    res.status(200).json({ result: "Job Applied" });
+    let html = `<h1>${user.full_name} has applied for ${job.company.name}</h1><p>${msg}</p>`
+    const cmpMan = await User.findOne({ company: job.company._id });
+    sendEmail(cmpMan.email, html, `A New Application for ${job.role} position`)
   } catch (err) {
-    req.err = err;
-    next();
+    next({ message: 'Internal Server Error', status: 500 });
   }
 }
 
@@ -232,15 +238,72 @@ const deleteUser = async (req, res, next) => {
   } catch (err) { }
 };
 
-const getJobApplicants = async (req, res, next) => {
-  const { job_id } = req.params;
+const getJobs = async (req, res, next) => {
+  const user = req.user;
   try {
-    const user = await User.find({ "applied_jobs.$oid": job_id });
+    if (user.role === 'manager') {
+      const jobs = await Job.find({ company: user.company }).populate('company');
+      res.status(200).json(jobs);
+    } else {
+      const jobs = await Job.find({}).populate('company');
+      res.status(200).json(jobs);
+    }
   } catch (err) {
     req.err = err;
     next();
   }
 };
+const getAllInvites = async (req, res, next) => {
+  const user = req.user;
+  console.log(user);
+  try {
+    const invites = await Invites.find({ user: user.key }).populate({ path: 'job', populate: { path: 'company' } });
+    console.log(invites);
+    res.status(200).json(invites);
+  } catch (err) {
+    console.log(err);
+    next({ message: err, status: 500 });
+  }
+}
+
+const getJobApplicants = async (req, res, next) => {
+  const { jobId } = req.body;
+  try {
+    const users = await User.find({ "applied_jobs": jobId });
+    console.log(users);
+    res.status(200).json(users);
+  } catch (err) {
+    req.err = err;
+    next();
+  }
+};
+
+const inviteApplicant = async (req, res, next) => {
+  const { userEmail, jobId } = req.body;
+  const link = uuid()
+  const user = await User.findOne({ email: userEmail });
+  const inv = new Invites({ user: user._id, job: jobId, link });
+  try {
+    const ud = inv.save();
+    console.log(ud);
+    res.status(200).json({ message: 'hehe', link });
+    // sendEmail()
+  } catch (err) {
+    next({ message: err, status: 500 })
+  }
+}
+
+const getProfile = async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const us = await User.findOne({ email });
+    //console.log(us)
+    res.status(200).json(us);
+  } catch (err) {
+    console.log(err)
+  }
+
+}
 
 const managerProfile = async (req, res, next) => {
   try {
@@ -272,8 +335,13 @@ module.exports = {
   createJob,
   resizeUserPhoto,
   uploadUserPhoto,
+  getAllInvites,
   logout,
+  manSignup,
   deleteUser,
   getJobApplicants,
   managerProfile,
+  getJobs,
+  inviteApplicant,
+  getProfile
 };

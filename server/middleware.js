@@ -10,10 +10,9 @@ const getLogin = async (req, res, next) => {
   } else if (req.cookies?.auth) {
     token = req.cookies?.auth;
   }
-  if (!token) return next({ status: 401, message: "Not Authorized" });
-  const user = await User.findByToken(token);
-  console.log(user);
+  if (!token || token === null || token === 'null') return next({ status: 401, message: "Not Authorized" });
   try {
+    const user = await User.findByToken(token);
     if (user) {
       if (user.email_verified) {
         req.user = user.toJSON();
@@ -25,20 +24,20 @@ const getLogin = async (req, res, next) => {
       next({ message: "User not found", status: 400 });
     }
   } catch (err) {
-    console.log(err);
-    if (err === "Email not verified") {
+    console.log(err, 'errrr');
+    if (err === "Email not verified")
       res.redirect("/");
-    } else if (err.name === "MongooseError") {
-      next({ message: "Server Error", status: 500 });
-    }
+    // } else if (err.name === "MongooseError") {
+    //   next({ message: "Server Error", status: 500 });
+    // }
   }
 };
 
 const checkMan = (req, res, next) => {
-  if (req.user.type === "manager") {
+  if (req.user.role === "manager") {
     next();
   } else {
-    next("Unauthorized Request");
+    next({ message: "Unauthorized Request", status: 401 });
   }
 };
 
@@ -59,7 +58,7 @@ const checkAdmin = (req, res, next) => {
   }
 };
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (req, res, next, err) => {
   console.log(err);
   res.status(err.status).json({ message: err.message });
 };

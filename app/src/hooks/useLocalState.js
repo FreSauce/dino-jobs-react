@@ -11,6 +11,7 @@ const useLocalState = (stateVar) => {
       localStorage.removeItem(stateVar);
     }
   }, [state]);
+
   return [state, setState];
 };
 

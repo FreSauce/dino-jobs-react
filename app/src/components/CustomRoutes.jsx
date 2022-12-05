@@ -1,12 +1,23 @@
 import { Container, Loader } from "@mantine/core";
-import React from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-//none, user, manager
+import { setToken } from "../store/authReducer";
+
 const CustomRoutes = ({ allowedRoles }) => {
-  const { user, loading } = useAuth();
+  const { user, loading, token } = useSelector(state => state.auth);
   const location = useLocation();
+  const { getUser } = useAuth();
+  const navigate = useNavigate();
   console.log("User: ", user, location);
+
+  useEffect(() => {
+    if (token)
+      getUser();
+  }, [token]);
+
+
   if (loading)
     return (
       <Container
@@ -23,6 +34,7 @@ const CustomRoutes = ({ allowedRoles }) => {
         <Loader color="violet" size="xl" variant="oval" />
       </Container>
     );
+  // if (!user) return <Navigate to="/login" />;
   if (!allowedRoles) return <Outlet />;
   return allowedRoles.includes(user?.role) ? (
     <Outlet />

@@ -9,6 +9,7 @@ import {
   IconReceipt2,
   IconLogout,
 } from "@tabler/icons";
+import useAuth from "../hooks/useAuth";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon");
@@ -16,21 +17,19 @@ const useStyles = createStyles((theme, _params, getRef) => {
     header: {
       paddingBottom: theme.spacing.md,
       marginBottom: theme.spacing.md * 1.5,
-      borderBottom: `1px solid ${
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2]
-      }`,
+      borderBottom: `1px solid ${theme.colorScheme === "dark"
+        ? theme.colors.dark[4]
+        : theme.colors.gray[2]
+        }`,
     },
 
     footer: {
       paddingTop: theme.spacing.md,
       marginTop: theme.spacing.md,
-      borderTop: `1px solid ${
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2]
-      }`,
+      borderTop: `1px solid ${theme.colorScheme === "dark"
+        ? theme.colors.dark[4]
+        : theme.colors.gray[2]
+        }`,
     },
 
     link: {
@@ -93,10 +92,11 @@ const data = [
   { link: "/jobs", label: "Jobs", icon: IconReceipt2 },
   { link: "/interview", label: "Interview", icon: IconKey },
   { link: "/saved-jobs", label: "Saved Jobs", icon: IconReceipt2 },
-  { link: "/settings", label: "Settings", icon: IconSettings },
+  { link: "/applied-jobs", label: "Applied Jobs", icon: IconReceipt2 },
 ];
 
 const SideBar = () => {
+  const { logout } = useAuth();
   const location = useLocation();
   const { classes, cx } = useStyles();
   const [active, setActive] = useState();
@@ -105,6 +105,11 @@ const SideBar = () => {
     setActive(location.pathname);
   }, [location]);
 
+  const Logout = () => {
+    logout().then(res => {
+      console.log(res);
+    });
+  }
   return (
     <Navbar fixed={true} width={{ sm: 250 }} p="md">
       <Navbar.Section grow>
@@ -136,7 +141,7 @@ const SideBar = () => {
           <span>Profile</span>
         </Link>
 
-        <Link to={"/logout"} className={classes.link}>
+        <Link to={"/"} onClick={Logout} className={classes.link}>
           <IconLogout className={classes.linkIcon} stroke={1.5} />
           <span>Logout</span>
         </Link>

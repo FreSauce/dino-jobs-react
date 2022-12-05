@@ -1,29 +1,31 @@
 import { useRef, useState } from 'react';
-import { Stepper, Button, Group, TextInput, NumberInput, Textarea, Modal, Badge, Box, FileInput, Grid } from '@mantine/core';
+import { Stepper, Button, Group, TextInput, NumberInput, Textarea, Modal, Badge, Box, FileInput, Grid, Image, Input } from '@mantine/core';
 import { useForm } from "@mantine/form";
 import { IconAt, IconUser, IconHome } from '@tabler/icons';
 import useAuth from '../hooks/useAuth';
 import validator from "validator";
 import { FaUserCircle } from 'react-icons/fa';
 import styles from './components.module.css';
+import { useSelector } from 'react-redux';
 
 
 const ProfileForm = () => {
-	const { user } = useAuth();
-
+	const { user } = useSelector(state => state.auth);
 	const [skillSet, setSkillSet] = useState([]);
 	const [skill, setSkill] = useState('');
 	const [opened, setOpened] = useState(false);
 	const [active, setActive] = useState(0);
 	const [btn, setBtn] = useState("Next Step");
 	const imageRef = useRef(null);
+	const imageContainer = useRef(null);
+
 	const nextStep = () => {
 		if (btn === "Submit") {
 			form.onSubmit((values) => {
 				console.log(values);
 			});
 		}
-		if (active === 2) {
+		if (active === 3) {
 			setBtn("Submit");
 		}
 		else {
@@ -35,13 +37,14 @@ const ProfileForm = () => {
 		setActive((current) => (current > 0 ? current - 1 : current));
 	const form = useForm({
 		initialValues: {
-			fullname: "",
-			email: "",
-			company: "",
-			phone: "",
-			address: "",
-			bio: "",
-			skills: [],
+			fullname: user.full_name,
+			email: user.email,
+			company: user.role === 'manager' ? user.company : null,
+			logo: '',
+			phone: user.phone || '',
+			address: user.address || '',
+			bio: user.bio || '',
+			skills: user.skills || [],
 			applied_jobs: [],
 		},
 		validate: {
@@ -57,8 +60,19 @@ const ProfileForm = () => {
 		setSkill('')
 	}
 	const handleImage = (event) => {
+		// event.preventDefault();
 		imageRef.current.click();
 	}
+
+	const handleImageChange = (event) => {
+		// event.preventDefault();
+		const file = event.target.files[0];
+		console.log(file);
+		let url = URL.createObjectURL(file);
+		console.log(url)
+		imageContainer.current.src = url;
+	}
+
 	return (
 		<>
 			<Modal
@@ -92,27 +106,28 @@ const ProfileForm = () => {
 							<TextInput
 								label="Email"
 								placeholder="Email*"
+								disabled
 								{...form.getInputProps("email")}
 								icon={<IconAt size={14} />}
 								required
 							/>
 						</Grid.Col>
 						<Grid.Col span={4}>
-							<input type={'file'} alt='image' accept='image/*' hidden ref={imageRef} />
-							<Box sx={{ width: '200px', height: '150px', display: 'flex', justifyContent: 'center' }}>
-								<FaUserCircle size={150} className={styles.image} onClick={handleImage} />
-							</Box>
+							<Input {...form.getInputProps('logo')} type={'file'} alt='image' onChange={handleImageChange} accept='image/*' hidden ref={imageRef} />
+							<img src={'https://icons.veryicon.com/png/o/miscellaneous/font-awesome-2/user-circle-o-2.png'} onClick={handleImage} style={{ filter: 'invert(0.6)', width: '150px', height: '150px', display: 'flex', justifyContent: 'center' }} ref={imageContainer} />
 						</Grid.Col>
 					</Grid>
 
 				</Stepper.Step>
 				<Stepper.Step label="Second step" >
-					<TextInput
-						label="Company"
-						placeholder="Company"
-						{...form.getInputProps("company")}
-						icon={<IconHome size={14} />}
-					/>
+					{user.role === 'manager' &&
+						<TextInput
+							label="Company"
+							placeholder="Company"
+							{...form.getInputProps("company")}
+							icon={<IconHome size={14} />}
+						/>
+					}
 					<NumberInput
 						label="Phone Number"
 						placeholder="Phone Number"
@@ -146,7 +161,7 @@ const ProfileForm = () => {
 
 			<Group position="center" mt="xl">
 				<Button variant="default" onClick={prevStep}>Back</Button>
-				<Button onClick={nextStep}>Next step</Button>
+				<Button onClick={nextStep}>{btn}</Button>
 			</Group>
 		</>
 	);

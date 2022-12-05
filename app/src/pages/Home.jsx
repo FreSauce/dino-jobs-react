@@ -1,15 +1,25 @@
 import { Button, Container, Group, Stack } from "@mantine/core";
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const Home = () => {
-  const { user } = useAuth();
+  const { user, token } = useSelector(state => state.auth);
+  const { getUser } = useAuth();
   const navigate = useNavigate();
   console.log(user);
-  if (user) {
-    navigate('/jobs', { replace: true });
-  }
+
+  useEffect(() => {
+    if (token) {
+      getUser().then(flag => {
+        if (flag)
+          navigate('/jobs', { replace: true });
+      });
+    }
+  }, [token, navigate, getUser])
+
+
   return (
     <div>
       <Container

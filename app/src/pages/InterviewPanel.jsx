@@ -5,22 +5,24 @@ import {
   Grid,
   Group,
   Text,
-  Image,
   Stack,
 } from "@mantine/core";
 import CodeEditor from "../components/CodeEditor";
-import { HiUserAdd } from "react-icons/hi";
+import { HiChevronDoubleRight } from "react-icons/hi";
 import { FiLogOut } from "react-icons/fi";
 import ChatBox from "../components/ChatBox";
-import RichTextEditor from "@mantine/rte";
 import useWebRTC from "../hooks/useWebRTC";
-import useAuth from "../hooks/useAuth";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Editor from "@monaco-editor/react";
 
 const InterviewPanel = () => {
   const interviewId = useParams();
-  const [peer, videoRef, chatRef, editorRef] = useWebRTC(interviewId);
-  const { user, logout } = useAuth();
+  const [videoRef, chatHandler, editorHandler, compile] = useWebRTC(interviewId);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/', { replace: true });
+  }
 
   return (
     <Container sx={{ height: "100vh", backgroundColor: "#202326" }} fluid p={0}>
@@ -47,14 +49,14 @@ const InterviewPanel = () => {
               justifyContent: "flex-end",
             }}
           >
-            <Button variant="filled" leftIcon={<HiUserAdd />}>
-              Invite
+            <Button onClick={compile} variant="filled" leftIcon={<HiChevronDoubleRight />}>
+              Run Code
             </Button>
             <Button
               variant="filled"
               color="red"
               leftIcon={<FiLogOut />}
-              onClick={logout}
+              onClick={handleClick}
             >
               End Interview
             </Button>
@@ -62,18 +64,15 @@ const InterviewPanel = () => {
         </Grid.Col>
         <Grid.Col span={12}>
           <Grid gutter={0}>
-            <Grid.Col span={5}>
-              <CodeEditor initComment={"// Write your code here"} />
-            </Grid.Col>
             <Grid.Col span={4}>
-              <RichTextEditor
-                sx={{
-                  height: "100%",
-                  backgroundColor: "#1e1e1e",
-                  borderRadius: 0,
-                }}
-                readOnly
-                value={"This is the output"}
+              <CodeEditor editorHandler={editorHandler} initComment={"// Write your code here"} />
+            </Grid.Col>
+            <Grid.Col span={5}>
+              <Editor
+                height="calc(100vh - 48px)"
+                theme="vs-dark"
+                value={editorHandler.output}
+                readOnly={true}
               />
             </Grid.Col>
             <Grid.Col
@@ -84,16 +83,13 @@ const InterviewPanel = () => {
             >
               <Stack sx={{ height: "100%" }}>
                 <Container p={15}>
-                  <Card sx={{ aspectRatio: "calc(16/9)" }}>
-                    <Card.Section>
-                      <Image
-                        src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8"
-                        alt="Norway"
-                      />
-                    </Card.Section>
+                  <Card sx={{ width: "100%", aspectRatio: "calc(4/3)", padding: "0 !important" }}>
+                    <video style={{
+                      transform: "scaleX(-1)",
+                    }} width={320} height={240} ref={videoRef}></video>
                   </Card>
                 </Container>
-                <ChatBox />
+                <ChatBox chatHandler={chatHandler} />
               </Stack>
             </Grid.Col>
           </Grid>

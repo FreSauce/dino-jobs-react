@@ -1,0 +1,14 @@
+.filter_wrapper {
+	width: 500px;
+	position: sticky !important;
+	top: 7rem;
+	right: 1rem;
+	height: 350px;
+}
+
+
+@media screen and (max-width:992px) {
+	.filter_wrapper {
+		display: none;
+	}
+}

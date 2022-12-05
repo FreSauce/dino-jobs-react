@@ -8,8 +8,6 @@ import {
   Text,
   Checkbox,
   MediaQuery,
-  Alert,
-  CheckIcon,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
@@ -34,7 +32,7 @@ const Login = ({ recruiter }) => {
     validate: {
       email: (value) => (validator.isEmail(value) ? null : "Invalid Email"),
       password: (value) =>
-        value.length >= 8
+        value.length >= 5
           ? null
           : "Password must be at least 8 characters long",
     },
@@ -44,7 +42,7 @@ const Login = ({ recruiter }) => {
     const res = await login({
       email: values.email,
       password: values.password,
-      role: recruiter ? "manager" : "user",
+      role: "user",
     });
     if (res) {
       showNotification({
@@ -64,13 +62,13 @@ const Login = ({ recruiter }) => {
       });
     }
     setLoading(false);
-    console.log(user);
+    // console.log(user);
   };
 
-  if (user) {
-    console.log(location.state?.from | "/");
-    return <Navigate to={location.state?.from || "/"} replace />;
-  }
+  // if (user) {
+  //   console.log(location.state?.from | "/");
+  //   return <Navigate to={location.state?.from || "/"} replace />;
+  // }
 
   return (
     <div

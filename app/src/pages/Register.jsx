@@ -36,9 +36,9 @@ const Register = ({ recruiter }) => {
       fullname: (value) => (value !== '' ? null : 'Full Name is required'),
       email: (value) => (validator.isEmail(value) ? null : "Invalid Email"),
       password: (value) =>
-        value.length >= 8
+        value.length >= 5
           ? null
-          : "Password must be at least 8 characters long",
+          : "Password must be at least 5 characters long",
       confirmPassword: (value, { password }) =>
         value === password ? null : "Passwords doesnt match",
       company: (value) => (recruiter ? value ? null : 'Company name should be specified' : null),
@@ -62,6 +62,12 @@ const Register = ({ recruiter }) => {
         color: "teal",
         autoClose: 2000,
       });
+      showNotification({
+        title: 'Info',
+        message: 'Please verify your email address',
+        color: 'teal',
+        autoClose: 2000,
+      })
       navigate((recruiter ? "/recruiter" : "") + "/login");
     } else {
       showNotification({

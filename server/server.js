@@ -9,12 +9,13 @@ const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const app = express();
 const server = require("http").Server(app);
-// const io = require("socket.io")(server);
-// const { ExpressPeerServer } = require("peer");
-// const peerServer = ExpressPeerServer(server, { debug: true });
-// const authRouter = require('./routes/authRouter')
-// const userRouter = require("./routes/userRouter");
-// const interviewRouter = require("./routes/interviewRouter");
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "OPTIONS"],
+  },
+});
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,4 +37,61 @@ app.use((err, req, res, next) => {
   errorHandler(req, res, next, err);
 });
 
-app.listen(8080, () => console.log("listening to 8080"));
+const socketInfo = {};
+io.on("connection", (socket) => {
+  try {
+    socket.on("join-room", ({ roomId, userId }) => {
+      if (roomId != null && userId != null) {
+        socketInfo[roomId] = socketInfo[roomId] || {};
+        if (Object.keys(socketInfo[roomId]).length === 2) {
+          if (socketInfo[roomId][userId] !== undefined) {
+            socketInfo[roomId][userId].socketId = socket.id;
+            socket.join(roomId);
+            io.to(roomId).emit("user-connected", socketInfo[roomId]);
+            io.to(roomId).emit("connect-peer", {
+              userList: socketInfo[roomId],
+            });
+          }
+          else {
+            socket.emit("room-full");
+          }
+        }
+        else {
+          socket.join(roomId);
+          socketInfo[roomId][userId] = {
+            userId,
+            socketId: socket.id,
+          };
+          io.to(roomId).emit("user-connected", socketInfo[roomId]);
+          if (Object.keys(socketInfo[roomId]).length === 2) {
+            io.to(roomId).emit("connect-peer", {
+              userList: socketInfo[roomId],
+            });
+          }
+        }
+        console.log(socketInfo);
+        socket.on("disconnect", () => {
+          delete socketInfo[roomId][userId];
+          io.to(roomId).emit("user-disconnected", userId);
+          if (Object.keys(socketInfo[roomId]).length === 0) {
+            delete socketInfo[roomId];
+          }
+          console.log(socketInfo);
+        });
+      }
+    })
+
+    socket.on("offer", (payload) => {
+      console.log(payload, 'off');
+      io.to(socketInfo[payload.roomId][payload.targetId].socketId).emit("offer", payload);
+    });
+
+    socket.on("answer", (payload) => {
+      console.log(payload);
+      io.to(socketInfo[payload.roomId][payload.targetId].socketId).emit("answer", payload);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+})
+server.listen(3002, () => console.log("listening to 3002"));

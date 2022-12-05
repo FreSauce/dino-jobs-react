@@ -11,30 +11,26 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { addSavedJob, removeSavedJob } from "../store/userReducer";
 
-const JobCard = ({ job, saved, setSavedJobs }) => {
+const JobCard = ({ job, applied, saved, savI, applyI }) => {
+  const { user } = useSelector(state => state.auth);
+  const { applyJob } = useAuth();
+  const dispatch = useDispatch();
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
-  const [active, setActive] = useState(1);
-  const [btn, setBtn] = useState("Next Step");
-  const nextStep = () => {
-    if (btn == "Submit") {
-      form.onSubmit((values) => {
-        console.log(values);
-      });
-    }
-    if (active == 2) {
-      setBtn("Submit");
-    }
-    setActive((current) => (current < 3 ? current + 1 : current));
-  };
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
+
   const form = useForm({
     initialValues: {
       message: "",
     },
   });
+  const handleApply = (ev) => {
+    setOpened(false);
+    applyJob(job._id, form.values.message);
+  }
   return (
     <>
       <Modal
@@ -59,27 +55,28 @@ const JobCard = ({ job, saved, setSavedJobs }) => {
         />
 
         <Group position="center" mt="xl">
-          <Button onClick={nextStep}>Submit</Button>
+          <Button onClick={handleApply}>Submit</Button>
         </Group>
       </Modal>
       <Card shadow="sm" radius="md" withBorder>
         <Group ml="xs">
           <Image
-            src="https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=720&q=80"
+            src={`${job.company.logo}`}
             height={70}
             width={70}
+            fit="contain"
             radius={5}
             alt="Norway"
           />
           <Card>
             <Text sx={{ fontWeight: "600", fontSize: "1rem" }}>
-              {job.company}
+              {job.company.name}
             </Text>
             <Text sx={{ fontWeight: "500", fontSize: "0.8rem" }}>
               {job.description}
             </Text>
             <Text sx={{ fontWeight: "500", fontSize: "0.8rem" }}>
-              {job.employees} Employees
+              {job.company.employees} Employees
             </Text>
           </Card>
         </Group>
@@ -111,21 +108,28 @@ const JobCard = ({ job, saved, setSavedJobs }) => {
             </span>
           </Text>
           <Group>
-            {saved ?
-              <Button variant="outline" mt="xs" radius="md" onClick={() => setSavedJobs(prev => prev.filter((j) => j.id !== job.id))}>Remove</Button>
-              : <Button variant="outline" mt="xs" radius="md" onClick={() => setSavedJobs(prev => [...prev, job])}>Save</Button>}
-            {/* <Button variant="outline" mt="xs" radius="md" onClick={() => setSavedJobs(prev => [...prev, job])}>
-              Save
-            </Button> */}
-            <Button
-              variant="light"
-              // color={'grape.6'}
-              mt="xs"
-              radius="md"
-              onClick={() => setOpened(true)}
-            >
-              Apply
-            </Button>
+            {
+              user.role === "manager" ? null
+                : applyI ? null : savI ?
+                  <Button variant="outline" mt="xs" radius="md" onClick={() => dispatch(removeSavedJob(job._id))}>Remove</Button>
+                  : <Button variant="outline" disabled={saved} mt="xs" radius="md" onClick={() => dispatch(addSavedJob(job))}>{saved ? 'Saved' : 'Save'}</Button>
+
+            }
+            {
+              user.role !== "manager" ?
+                !applyI ?
+                  <Button
+                    variant="light"
+                    mt="xs"
+                    radius="md"
+                    onClick={() => setOpened(true)}
+                    disabled={applied}
+                  >
+                    {applied ? 'Applied' : 'Apply'}
+                  </Button>
+                  : null
+                : null
+            }
           </Group>
         </Group>
       </Card>

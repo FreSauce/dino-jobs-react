@@ -11,6 +11,8 @@ import {
 	MultiSelect,
 } from "@mantine/core";
 import { useState } from "react";
+import useAuth from "../hooks/useAuth";
+
 
 const skillData = [
 	{
@@ -28,6 +30,7 @@ const skillData = [
 ]
 
 const CreateJobForm = ({ opened, setOpened, setJobs }) => {
+	const { createJobs } = useAuth();
 	const form = useForm({
 		initialValues: {
 			role: "",
@@ -50,6 +53,11 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 			setJobs(prev => [...prev, values])
 			console.log(form.values);
 			setOpened(false);
+			createJobs(values).then(res => {
+				console.log(res);
+			}).catch(err => {
+				console.log(err);
+			})
 			// });
 		}
 		if (active === 2) {
@@ -60,8 +68,16 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 		}
 		setActive((current) => (current < 3 ? current + 1 : current));
 	};
-	const prevStep = () =>
+	const prevStep = () => {
+
+		if (active === 2) {
+			setBtn("Submit");
+		}
+		else {
+			setBtn("Next Step");
+		}
 		setActive((current) => (current > 0 ? current - 1 : current))
+	}
 
 	return (
 		<>
@@ -70,7 +86,7 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 					<Stepper.Step p={20} label="First step">
 						<Box px={30}>
 							<TextInput
-								label="Name"
+								label="Role"
 								placeholder="Role*"
 								{...form.getInputProps("role")}
 								mb={13}

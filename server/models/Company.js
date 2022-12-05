@@ -16,10 +16,6 @@ const CompanyModel = new Schema({
 		type: String,
 	},
 	employees: Number,
-	jobs: [{
-		type: Schema.Types.ObjectId,
-		ref: 'Job',
-	}],
 });
 
 module.exports = model('Company', CompanyModel);

@@ -12,58 +12,23 @@ import RichTextEditor from "@mantine/rte";
 import { IconSend } from "@tabler/icons";
 import { useEffect } from "react";
 import { useState, useRef } from "react";
+import { useSelector } from "react-redux";
 
-const chatDB = [
-  {
-    name: "Shardul Kurdukar",
-    message: "Hello, this is a test message",
-  },
-  {
-    name: "Shardul Kurukar",
-    message: "Hello, this is a test message",
-  },
-  {
-    name: "Shardul Kurukre",
-    message: "Hello, this is a test message",
-  },
-  {
-    name: "Shardul Kurdukar",
-    message: "Hello, this is a test message",
-  },
-  {
-    name: "Shardul Kurdukar",
-    message: "Hello, this is a test message",
-  },
-  {
-    name: "Shardul Kurdukar",
-    message: "Hello, this is a test message",
-  },
-  {
-    name: "Shardul Kurdukar",
-    message: "Hello, this is a test message",
-  },
-  {
-    name: "Shardul Kurdukar",
-    message: "Hello, this is a test message",
-  },
-];
-
-const ChatBox = () => {
+const ChatBox = ({ chatHandler }) => {
   const [activeTab, setActiveTab] = useState("chat");
-  const [chats, setChats] = useState([]);
+  const { user } = useSelector((state) => state.auth);
+  const [currChat, setCurrChat] = useState("");
   const containerRef = useRef();
   const chatboxRef = useRef();
 
   useEffect(() => {
-    console.log("hehe");
     const r = () => {
       chatboxRef.current.style.height =
         containerRef.current.clientHeight + "px";
     };
-    // r();
-    setChats(chatDB);
-    // window.addEventListener('resize', r);
-    // return _ => window.removeEventListener('resize', r);
+    r();
+    window.addEventListener('resize', r);
+    return _ => window.removeEventListener('resize', r);
   }, [chatboxRef]);
 
   return (
@@ -93,16 +58,15 @@ const ChatBox = () => {
                 sx={{ flexDirection: "column", flexGrow: 2 }}
                 ref={containerRef}
               >
-                {console.log(containerRef?.current?.clientHeight)}
                 <div
                   ref={chatboxRef}
                   style={{ overflowY: "auto" }}
                   className="custom-scroll"
                 >
-                  {chats.map((chat, index) => (
+                  {chatHandler.chats.map((chat, index) => (
                     <Group key={index}>
                       <Avatar src={chat.name} label={chat.name}>
-                        SK
+                        {chat.name[0].toUpperCase()}
                       </Avatar>
                       <Blockquote sx={{}} cite={`- ${chat.name}`} icon={null}>
                         {chat.message}
@@ -124,8 +88,14 @@ const ChatBox = () => {
                   placeholder="Your comment"
                   sx={{ flexGrow: 1 }}
                   pr={10}
+                  value={currChat}
+                  onChange={(e) => setCurrChat(e.target.value)}
                 />
-                <ActionIcon variant="transparent" color="violet">
+                <ActionIcon onClick={() => {
+                  chatHandler.sendChat(user.full_name, currChat)
+                  setCurrChat("")
+                }}
+                  variant="transparent" color="violet">
                   <IconSend size={32} />
                 </ActionIcon>
               </Container>

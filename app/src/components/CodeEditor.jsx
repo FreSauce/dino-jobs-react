@@ -2,7 +2,7 @@ import Editor, { useMonaco } from "@monaco-editor/react";
 import { useRef } from "react";
 import { useEffect } from "react";
 
-const CodeEditor = ({ initComment }) => {
+const CodeEditor = ({ initComment, editorHandler }) => {
   const monaco = useMonaco();
 
   useEffect(() => {
@@ -18,6 +18,8 @@ const CodeEditor = ({ initComment }) => {
       language="cpp"
       theme="vs-dark"
       defaultValue={initComment}
+      value={editorHandler.value}
+      onChange={value => editorHandler.change(value)}
     />
   );
 };

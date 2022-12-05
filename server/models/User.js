@@ -56,6 +56,13 @@ const UserSchema = new Schema({
       // unique: true,
     },
   ],
+  saved_jobs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Job",
+      // unique: true,
+    },
+  ],
 });
 
 UserSchema.methods.toJSON = function () {
@@ -103,7 +110,7 @@ UserSchema.statics.findByToken = async function (token) {
   return User.findOne({
     _id: decoded._id,
     role: decoded.role,
-  });
+  }).populate({ path: 'applied_jobs.company' });
 };
 
 UserSchema.pre("save", function (next) {
