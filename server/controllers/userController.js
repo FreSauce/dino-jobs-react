@@ -63,6 +63,7 @@ function login(req, flag, res) {
       return user.comparePassword(password);
     })
     .then((user) => {
+      console.log(user);
       if (user && user.role === flag) {
         return User.findByIdAndUpdate(user._id, { logged_in: true }).then(res => {
           return { user, token: user.generateToken() };
@@ -82,7 +83,7 @@ async function signup(user, res) {
     res.status(200).json({ result: "Mail Sent" });
     const token = new_user.generateToken();
     const html = "<h2>Please click the link below to verify your email</h2>" +
-      '<a href="http://localhost:8080/auth/verify/' +
+      '<a href="http://localhost:3002/auth/verify/' +
       token +
       '">Verify Here</a>';
     await sendEmail(user.email, html, 'Please confirm your Email account');
@@ -103,7 +104,7 @@ async function manSignup(user, company, res) {
     res.status(200).json({ result: "Mail Sent" });
     const token = new_user.generateToken();
     const html = "<h2>Please click the link below to verify your email</h2>" +
-      '<a href="http://localhost:8080/auth/verify/' +
+      '<a href="http://localhost:3002/auth/verify/' +
       token +
       '">Verify Here</a>';
     await sendEmail(user.email, html, 'Please confirm your Email account');

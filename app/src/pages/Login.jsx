@@ -42,7 +42,7 @@ const Login = ({ recruiter }) => {
     const res = await login({
       email: values.email,
       password: values.password,
-      role: "user",
+      role: recruiter ? "manager" : 'user',
     });
     if (res) {
       showNotification({

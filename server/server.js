@@ -1,12 +1,12 @@
 require("dotenv").config({ path: "./config.env" });
-
-const path = require("path");
 const cors = require("cors");
 const morgan = require("morgan");
 const cookie = require("cookie-parser");
 const bodyParser = require("body-parser");
 const express = require("express");
 const { v4: uuidv4 } = require("uuid");
+const swaggerUi = require("swagger-ui-express");
+const { apiDoc } = require('./docs');
 const app = express();
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
@@ -25,6 +25,7 @@ const { errorHandler } = require("./middleware");
 
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use(cors());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDoc))
 
 app.use("/interview", require("./routes/interviewRouter"));
 app.use("/auth", require("./routes/authRouter"));

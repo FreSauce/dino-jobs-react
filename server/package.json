@@ -21,6 +21,7 @@
     "nodemailer": "^6.7.3",
     "peer": "^0.6.1",
     "socket.io": "^4.4.1",
+    "swagger-ui-express": "^4.6.2",
     "uuidv4": "^6.2.13",
     "validator": "^13.7.0"
   },

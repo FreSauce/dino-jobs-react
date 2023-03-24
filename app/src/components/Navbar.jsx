@@ -5,7 +5,6 @@ import {
   IconHome,
   IconUser,
   IconKey,
-  IconSettings,
   IconReceipt2,
   IconLogout,
 } from "@tabler/icons";
@@ -90,7 +89,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 const data = [
   { link: "/home", label: "Home", icon: IconHome },
   { link: "/jobs", label: "Jobs", icon: IconReceipt2 },
-  { link: "/interview/exampleid", label: "Interview", icon: IconKey },
+  { link: "/interview", label: "Interview", icon: IconKey },
   { link: "/saved-jobs", label: "Saved Jobs", icon: IconReceipt2 },
   { link: "/applied-jobs", label: "Applied Jobs", icon: IconReceipt2 },
 ];
