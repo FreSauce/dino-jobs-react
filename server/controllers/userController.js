@@ -309,7 +309,7 @@ const inviteApplicant = async (req, res, next) => {
   try {
     const ud = inv.save();
     console.log(ud);
-    res.status(200).json({ message: 'hehe', link });
+    res.status(200).json({ message: 'Invited Applicant', link });
     // sendEmail()
   } catch (err) {
     next({ message: err, status: 500 })
@@ -342,6 +342,7 @@ const managerProfile = async (req, res, next) => {
     comp.save((err, docs) => {
       if (err) console.log(err);
       console.log(docs);
+      res.status(200).json({ result: "Managed Profile" });
     });
   } catch (err) {
     req.err = err;
