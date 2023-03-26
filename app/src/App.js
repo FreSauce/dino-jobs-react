@@ -1,12 +1,11 @@
 import "./App.css";
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import InterviewPanel from "./pages/InterviewPanel";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import RecRegister from "./pages/RecRegister";
 import CustomRoutes from "./components/CustomRoutes";
-import Jobs from "./pages/Jobs";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import SavedJobs from './pages/SavedJobs'
@@ -16,12 +15,11 @@ import ApplyJobs from "./pages/ApplyJobs";
 import { setAppliedJobs } from "./store/userReducer";
 import ManJobs from "./pages/ManJobs";
 import JobHandler from "./components/JobHandler";
-import Interview from "./pages/Interview";
 import InterviewHandler from "./components/InterviewHandler";
 
 
 function App() {
-  const { user, loading } = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.auth)
   const { saved_jobs } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
@@ -29,10 +27,9 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) dispatch(setToken(token));
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log(saved_jobs)
     localStorage.setItem('savedJobs', JSON.stringify(saved_jobs))
   }, [saved_jobs])
 
@@ -40,7 +37,7 @@ function App() {
     if (user && user.applied_jobs) {
       dispatch(setAppliedJobs(user.applied_jobs))
     }
-  }, [user])
+  }, [dispatch, user])
 
   return (
     <div className="App">

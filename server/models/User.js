@@ -48,6 +48,10 @@ const UserSchema = new Schema({
   },
   address: String,
   bio: String,
+  resume: {
+    type: String,
+    default: null,
+  },
   skills: [String],
   applied_jobs: [
     {
@@ -110,7 +114,7 @@ UserSchema.statics.findByToken = async function (token) {
   return User.findOne({
     _id: decoded._id,
     role: decoded.role,
-  }).populate({ path: 'applied_jobs.company' });
+  }).populate('applied_jobs').populate('company');
 };
 
 UserSchema.pre("save", function (next) {

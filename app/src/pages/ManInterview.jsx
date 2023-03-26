@@ -2,7 +2,6 @@ import { Box, Button, Container, Select } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import MainWrapper from '../components/MainWrapper'
 import ProfileCard from '../components/ProfileCard'
 import useAuth from '../hooks/useAuth'
@@ -25,7 +24,7 @@ const ManInterview = () => {
 		}).catch(err => {
 			console.log(err);
 		})
-	}, []);
+	}, [dispatch, getJobs]);
 
 	const getAppliedUsers = (job_id) => {
 		setSelectedJob(job_id)

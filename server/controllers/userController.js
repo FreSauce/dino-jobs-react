@@ -3,9 +3,16 @@ const nodemailer = require("nodemailer");
 const multer = require("multer");
 const { uuid } = require("uuidv4");
 const path = require("path");
+const fs = require("fs");
+const { getUpdateProfile } = require("../utils");
 
 const multerStorage = multer.diskStorage({
-  destination: "./public/uploads",
+  destination: (req, file, cb) => {
+    if (!fs.existsSync(`public/uploads/${req.user.key.toString()}`)) {
+      fs.mkdirSync(`public/uploads/${req.user.key.toString()}`);
+    }
+    cb(null, `public/uploads/${req.user.key.toString()}/`);
+  },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
@@ -24,25 +31,12 @@ const multerFilter = (req, file, cb) => {
 
 const upload = multer({
   storage: multerStorage,
-  fileFilter: multerFilter,
+  // fileFilter: multerFilter,
 });
 
-const resizeUserPhoto = async (req, res, next) => {
-  try {
-    if (!req.file) return next();
-    req.file.filename = `${uuid()}.jpeg`;
-    console.log(req.file);
 
-    await sharp(req.file.buffer)
-      .resize(500, 500)
-      .toFormat("jpeg")
-      .jpeg({ quality: 90 })
-      .toFile(`./public/uploads/${req.file.filename}`);
-    next();
-  } catch (err) { }
-};
+const uploadUserPhoto = upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'resume', maxCount: 1 }, { name: 'company_logo', maxCount: 1 }]);
 
-const uploadUserPhoto = upload.single("avatar");
 
 const mailServer = nodemailer.createTransport({
   service: "gmail",
@@ -124,13 +118,41 @@ async function fetchUser(req, res, next) {
 }
 
 async function updateUser(req, res, next) {
-  req.body.avatar = req.file.filename;
-  console.log(req.body);
+  console.log(req.files);
+  const { email, full_name, phone, address, bio, skills } = req.body;
+  let avatar, resume, logo;
+  if (req.files['avatar'] !== undefined) {
+    avatar = req.files['avatar'][0];
+  }
+  if (req.files['resume'] !== undefined) {
+    resume = req.files['resume'][0];
+  }
+  let update_user;
+  if (req.user.role === 'manager') {
+    const { name, employees, website, description } = req.body;
+    if (req.files['company_logo'] !== undefined) {
+      logo = req.files['company_logo'][0].path;
+    }
+    const upComp = await Company.findOneAndUpdate({ _id: req.user.company._id }, { name, employees, website, logo, description }, { new: true });
+    console.log(upComp);
+    logo = upComp.logo;
+  }
+  update_user = getUpdateProfile({ email, full_name, phone, address, bio, skills, avatar, resume });
+  console.log(update_user);
   try {
-    let doc = await User.findOneAndUpdate({ _id: req.user.key }, req.body, {
-      new: false,
-    });
+    let doc = await User.findOneAndUpdate({ _id: req.user.key.toString() }, update_user, { new: true });
     console.log(doc);
+    fs.readdir(`public/uploads/${req.user.key.toString()}`, (err, files) => {
+      if (err) throw err;
+      for (const file of files) {
+        console.log(file);
+        if (file === doc.avatar?.split('/').pop() || file === doc.resume?.split('/').pop() || file == logo?.split('/').pop()) continue;
+        fs.unlink(path.join(`public/uploads/${req.user.key.toString()}`, file), (err) => {
+          if (err) throw err;
+        });
+      }
+    });
+    res.status(200).json({ message: "User updated successfully" });
   } catch (err) {
     req.err = err;
     next();
@@ -334,7 +356,6 @@ module.exports = {
   fetchUser,
   applyJob,
   createJob,
-  resizeUserPhoto,
   uploadUserPhoto,
   getAllInvites,
   logout,

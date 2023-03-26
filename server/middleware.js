@@ -27,6 +27,7 @@ const getLogin = async (req, res, next) => {
     console.log(err, 'errrr');
     if (err === "Email not verified")
       res.redirect("/");
+    next();
     // } else if (err.name === "MongooseError") {
     //   next({ message: "Server Error", status: 500 });
     // }

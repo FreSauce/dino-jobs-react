@@ -137,7 +137,7 @@ const ManSideBar = () => {
 					<span>Profile</span>
 				</Link>
 
-				<Link to={"/logout"} className={classes.link}>
+				<Link to={"/"} onClick={Logout} className={classes.link}>
 					<IconLogout className={classes.linkIcon} stroke={1.5} />
 					<span>Logout</span>
 				</Link>

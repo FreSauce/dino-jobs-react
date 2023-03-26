@@ -26,6 +26,8 @@ const { errorHandler } = require("./middleware");
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use(cors());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDoc))
+app.use(express.static("public"));
+
 
 app.use("/interview", require("./routes/interviewRouter"));
 app.use("/auth", require("./routes/authRouter"));

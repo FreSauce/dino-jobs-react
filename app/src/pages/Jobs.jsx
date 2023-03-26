@@ -1,4 +1,4 @@
-import { Container, Grid, Card, Slider, Input, Button, MediaQuery, Box, Select } from '@mantine/core';
+import { Container, Grid, Card, Slider, Button, Box, Select } from '@mantine/core';
 import JobCard from '../components/JobCard';
 import MainWrapper from '../components/MainWrapper';
 import useAuth from '../hooks/useAuth';
@@ -27,11 +27,11 @@ const Jobs = () => {
     }).catch(err => {
       console.log(err);
     })
-  }, [])
+  }, [dispatch])
 
 
   const handleFilter = (ev) => {
-    console.log(salaryFilter, employeeFilter, roleFilter)
+    console.log(salaryFilter, employeeFilter, roleFilter, jobs)
     setFilteredJobs(prev => {
       let g = jobs.filter(job => job.salary >= salaryFilter && job.company.employees >= employeeFilter && job.role === roleFilter)
       console.log(g);

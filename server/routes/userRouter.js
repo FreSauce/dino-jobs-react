@@ -24,7 +24,7 @@ userRouter.get("/profile", fetchUser);
 
 userRouter.post('/get-applicant-profile', checkMan, getProfile)
 
-userRouter.post("/update-user", uploadUserPhoto, updateUser);
+userRouter.post("/update-profile", uploadUserPhoto, updateUser);
 
 userRouter.post("/apply-job", applyJob);
 

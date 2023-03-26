@@ -1,4 +1,4 @@
-import { Container, Grid } from '@mantine/core';
+import { Container } from '@mantine/core';
 import ProfileForm from '../components/ProfileForm';
 import MainWrapper from '../components/MainWrapper';
 

@@ -1,14 +1,13 @@
-import { useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, updateUser, logout, setToken, setLoading } from '../store/authReducer';
+import { loginUser, updateUser, setToken, setLoading } from '../store/authReducer';
 import { addAppliedJob } from "../store/userReducer";
 
 const useAuth = () => {
   const api = axios.create({
     baseURL: 'http://localhost:3002/'
   });
-  const { user, token } = useSelector(state => state.auth);
+  const { token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const getJobs = async () => {
@@ -122,6 +121,20 @@ const useAuth = () => {
       });
   };
 
+  const updateProfile = async (profileData) => {
+    const res = await api.post(
+      `update-profile`,
+      profileData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+    );
+    console.log(res);
+    return res.data;
+  }
+
   const getUser = async () => {
     return api
       .get("profile", {
@@ -167,7 +180,7 @@ const useAuth = () => {
     localStorage.removeItem('token');
   };
 
-  return { login, logout, signup, getUser, getJobs, applyJob, createJobs, getApplicants, sendInvite, getProfile, runCode, getAllInvites };
+  return { login, logout, signup, getUser, getJobs, applyJob, createJobs, getApplicants, updateProfile, sendInvite, getProfile, runCode, getAllInvites };
 };
 
 export default useAuth;

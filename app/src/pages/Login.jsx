@@ -10,7 +10,7 @@ import {
   MediaQuery,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "@mantine/form";
 import React, { useState } from "react";
 import validator from "validator";
@@ -19,7 +19,7 @@ import useAuth from "../hooks/useAuth";
 const Login = ({ recruiter }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, login } = useAuth();
+  const { login } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const form = useForm({
