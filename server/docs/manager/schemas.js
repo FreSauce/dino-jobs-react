@@ -14,13 +14,5 @@ exports.createManagerBody = {
 			description: "unencrypted user's password",
 			example: '!1234aWe1Ro3$#',
 		},
-		enabled: {
-			type: 'boolean',
-			example: true,
-		},
-		role: {
-			type: 'string',
-			example: 'Manager',
-		},
 	},
 }

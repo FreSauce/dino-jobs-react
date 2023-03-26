@@ -1,28 +1,19 @@
 const { users } = require('./users')
 const { jobs } = require('./jobs')
 const { manager } = require('./manager')
+const { userAuthErrorResponse } = require('./users/schemas')
 
 exports.apiDoc = {
 	openapi: '3.0.1',
 	info: {
 		title: 'DinoJobs API',
 		description: 'A Job Searching Platform with interview scheduling, video conferencing and shared code editor',
-		termsOfService: 'https://mysite.com/terms',
-		contact: {
-			name: 'Developer name',
-			email: 'dev@example.com',
-			url: 'https://devwebsite.com',
-		}
 	},
 	servers: [
 		{
 			url: 'http://localhost:3002/',
 			description: 'Local Server',
-		},
-		{
-			url: 'https://api.mysite.com',
-			description: 'Production Server',
-		},
+		}
 	],
 	tags: [
 		{
@@ -39,17 +30,11 @@ exports.apiDoc = {
 		}
 	],
 	paths: {
-		"/user/register": {
+		"/auth/user/register": {
 			post: users.createUser
 		},
-		"/manager/register": {
-			post: manager.createManager
-		},
-		"/user/login": {
+		"/auth/user/login": {
 			post: users.loginUser
-		},
-		"/manager/login": {
-			post: manager.loginManager
 		},
 		"/profile": {
 			get: users.getUserProfile
@@ -63,20 +48,23 @@ exports.apiDoc = {
 		'/get-all-invites': {
 			get: users.getAllInvites
 		},
-		"/jobs": {
-			get: jobs.getJobs
+		"/auth/manager/register": {
+			post: manager.createManager
 		},
-		'/get-applicant-profile' : {
-			post: manager.getApplicantProfile
-		},
-		"/create-job": {
-			post: jobs.createJob
-		},
-	  "/manager/home": {
-			post: manager.managerProfile
+		"/auth/manager/login": {
+			post: manager.loginManager
 		},
 		'/invite-applicant': {
 			post: manager.inviteApplicant
+		},
+		'/get-applicant-profile': {
+			post: manager.getApplicantProfile
+		},
+		"/jobs": {
+			get: jobs.getJobs
+		},
+		"/create-job": {
+			post: jobs.createJob
 		},
 	},
 	components: {
@@ -90,7 +78,9 @@ exports.apiDoc = {
 		schemas: {
 			createUserBody: users.createUserBody,
 			createCompanyBody: users.createCompanyBody,
-			createJobBody: users.createJobBody,
+			createJobBody: jobs.createJobBody,
+			createManagerBody: manager.createManagerBody,
+			userAuthErrorResponse: users.userAuthErrorResponse,
 		},
 	},
 }

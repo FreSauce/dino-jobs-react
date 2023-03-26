@@ -82,7 +82,7 @@ async function signup(user, res) {
       '">Verify Here</a>';
     await sendEmail(user.email, html, 'Please confirm your Email account');
   } catch (err) {
-    console.log(err);
+    console.log('my_err', err);
     res.status(400).json({ result: Object.keys(err.errors).map(e => err.errors[e].message).pop() });
   }
 }

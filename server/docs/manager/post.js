@@ -1,49 +1,14 @@
-const { createManagerBody } = require("./schemas");
+const { userResponseBody } = require("../users/schemas");
 
 exports.createManager = {
 	tags: ['Manager'],
 	description: 'Create a new manager in the database',
 	operationId: 'createManager',
-	security: [
-		{
-			bearerAuth: [],
-		},
-	],
-  parameters: [
-		{
-			name: 'role',
-			in: 'path',
-			description: 'The role of the user',
-			required: true,
-			schema: {
-				type: 'string',
-				enum: ['manager'],
-			},
-		},
-		{
-			name: 'email',
-			in: 'path',
-			description: 'The email of the user',
-			required: true,
-			schema: {
-				type: 'string',
-			},
-		},
-		{
-			name: 'password',
-			in: 'path',
-			description: 'The password of the user',
-			required: true,
-			schema: {
-				type: 'string',
-			},
-		}
-	],
 	requestBody: {
 		content: {
 			'application/json': {
 				schema: {
-					$ref: '#/components/schemas/createUserBody',
+					$ref: '#/components/schemas/createManagerBody',
 				},
 			},
 		},
@@ -96,25 +61,14 @@ exports.getApplicantProfile = {
 			bearerAuth: [],
 		},
 	],
-	parameters: [
-		{
-			name: 'applicantId',
-			in: 'path',
-			description: 'The applicant id',
-
-			required: true,
-			schema: {
-				type: 'string',
-				example: '60564fcb544047cdc3844818',
-			},
-		},
-	],
 	responses: {
 		'200': {
 			description: 'Applicant profile',
 			content: {
 				'application/json': {
-					schema: createManagerBody
+					schema: {
+						$ref: '#/components/schemas/createManagerBody',
+					},
 				},
 			},
 		},
@@ -154,52 +108,6 @@ exports.getApplicantProfile = {
 };
 
 
-
-exports.managerProfile = {
-	tags: ['Manager'],
-	description: 'Get manager profile',
-	operationId: 'managerProfile',
-	security: [
-		{
-			bearerAuth: [],
-		},
-	],
-	responses: {
-		'200': {
-			description: 'Manager profile',
-			content: {
-				'application/json': {
-					schema: {
-						type: 'object',
-						properties: {
-							message: {
-								type: 'string',
-								example: 'Managed Profile',
-							},
-						},
-					},
-				},
-			},
-		},
-		'404': {
-			description: 'Manager not found',
-			content: {
-				'application/json': {
-					schema: {
-						type: 'object',
-						properties: {
-							message: {
-								type: 'string',
-								example: 'Manager not found',
-							},
-						},
-					},
-				},
-			},
-		},
-	},
-}
-
 exports.inviteApplicant = {
 	tags: ['Manager'],
 	description: 'Invite applicant to interview',
@@ -236,7 +144,7 @@ exports.inviteApplicant = {
 				},
 			},
 		},
-  	'400': {
+		'400': {
 			description: 'Bad Request',
 			content: {
 				'application/json': {
@@ -255,5 +163,72 @@ exports.inviteApplicant = {
 	},
 }
 
-			
+
+exports.loginManager = {
+	tags: ['Manager'],
+	description: 'Login manager',
+	operationId: 'loginManager',
+	requestBody: {
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						email: {
+							type: 'string',
+							example: "test@gmail.com",
+						},
+						password: {
+							type: 'string',
+							example: "test01",
+						},
+					},
+				}
+			},
+		},
+		required: true,
+	},
+	responses: {
+		'200': {
+			description: 'User logged in successfully!',
+			content: {
+				'application/json': {
+					schema: {
+						type: 'object',
+						properties: {
+							token: {
+								type: 'string',
+								example: 'asdfoy8w90a8923h32u'
+							},
+							user: userResponseBody
+						},
+						message: {
+							type: 'string',
+							example: 'Login Successful',
+						},
+					},
+				},
+			},
+		},
+	},
+	'404': {
+		description: 'User not found',
+		content: {
+			'application/json': {
+				schema: {
+					type: 'object',
+					properties: {
+						message: {
+							type: 'string',
+							example: 'User not found',
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+
+
 

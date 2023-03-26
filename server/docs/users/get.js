@@ -34,6 +34,23 @@ exports.getUserProfile = {
 				},
 			},
 		},
+		'401': {
+			description: 'Unauthorized',
+			content: {
+				'application/json': {
+					schema: {
+						type: 'object',
+						properties: {
+
+							message: {
+								type: 'string',
+								example: 'Unauthorized',
+							}
+						}
+					}
+				}
+			}
+		},
 		'500': {
 			description: 'Internal Server Error',
 			content: {
@@ -65,24 +82,41 @@ exports.getAllInvites = {
 		},
 	],
 	responses: {
-    '200': {
-      description: 'Invites retrieved successfully!',
-      content: {
-        'application/json': {
-          schema: 
-            createJobBody,
-            createUserBody,
-            type: 'object',
-            properties: {
-              message: {
-                type: 'string',
-                example: 'https://www.google.com',
-              }
-            },
-          
-        },
-      },
-    },
+		'200': {
+			description: 'Invites retrieved successfully!',
+			content: {
+				'application/json': {
+					schema:
+						createJobBody,
+					createUserBody,
+					type: 'object',
+					properties: {
+						message: {
+							type: 'string',
+							example: 'https://www.google.com',
+						}
+					},
+
+				},
+			},
+		},
+		'401': {
+			description: 'Unauthorized',
+			content: {
+				'application/json': {
+					schema: {
+						type: 'object',
+						properties: {
+
+							message: {
+								type: 'string',
+								example: 'Unauthorized',
+							}
+						}
+					}
+				}
+			}
+		},
 		'500': {
 			description: 'Internal Server Error',
 			content: {

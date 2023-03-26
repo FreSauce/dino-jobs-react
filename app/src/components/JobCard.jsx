@@ -61,12 +61,12 @@ const JobCard = ({ job, applied, saved, savI, applyI }) => {
       <Card shadow="sm" radius="md" withBorder>
         <Group ml="xs">
           <Image
-            src={`${job.company.logo}`}
+            src={`http://localhost:3002/${job.company.logo.replace('public/', '')}`}
             height={70}
             width={70}
             fit="contain"
             radius={5}
-            alt="Norway"
+            alt={`${job.company.name}`}
           />
           <Card>
             <Text sx={{ fontWeight: "600", fontSize: "1rem" }}>
