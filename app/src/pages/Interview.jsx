@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import MainWrapper from '../components/MainWrapper'
-import { Card, Image, Text, Badge, Button, Group, Container } from '@mantine/core';
+import { Card, Image, Text, Button, Group, Container } from '@mantine/core';
 import useAuth from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
 

@@ -1,5 +1,4 @@
 import Editor, { useMonaco } from "@monaco-editor/react";
-import { useRef } from "react";
 import { useEffect } from "react";
 
 const CodeEditor = ({ initComment, editorHandler }) => {

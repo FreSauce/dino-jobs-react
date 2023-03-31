@@ -114,7 +114,7 @@ UserSchema.statics.findByToken = async function (token) {
   return User.findOne({
     _id: decoded._id,
     role: decoded.role,
-  }).populate('applied_jobs').populate('company');
+  }).populate('company').populate({ path: 'applied_jobs', populate: { path: 'company', model: 'Company' } });
 };
 
 UserSchema.pre("save", function (next) {

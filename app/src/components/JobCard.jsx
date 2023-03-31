@@ -22,6 +22,7 @@ const JobCard = ({ job, applied, saved, savI, applyI }) => {
   const [opened, setOpened] = useState(false);
   const theme = useMantineTheme();
 
+
   const form = useForm({
     initialValues: {
       message: "",
