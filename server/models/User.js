@@ -83,7 +83,7 @@ UserSchema.methods.comparePassword = function (password) {
   const user = this;
   return bcrypt.compare(password, user.password).then((isMatch) => {
     if (!isMatch) {
-      return Promise.reject();
+      return Promise.reject('Password is incorrect');
     }
     return user;
   });

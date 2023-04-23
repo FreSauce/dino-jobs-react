@@ -3,22 +3,7 @@ const { login, signup, verifyEmail, manSignup } = require("../controllers/userCo
 
 const authRouter = Router();
 
-authRouter.post("/:role/login", (req, res, next) => {
-  login(req, req.params.role, res)
-    .then(({ user, token }) => {
-      if (token) {
-        res
-          .cookie("login", token)
-          .status(200)
-          .json({ message: "Login Successful", user, token });
-      } else {
-        next({ message: 'Internal Server Error', status: 500 });
-      }
-    })
-    .catch((err) => {
-      next({ message: err, status: 400 });
-    });
-});
+authRouter.post("/:role/login", login);
 
 authRouter.post("/:role/register", async (req, res, next) => {
   const { email, password, full_name, company_name, description, website, employees } = req.body;

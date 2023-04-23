@@ -1,10 +1,20 @@
-require("dotenv").config({ path: "./config.env" });
+require("dotenv").config();
+const redis = require('redis');
+
+if (process.env.NODE_ENV !== 'production') {
+  const client = redis.createClient(process.env.REDIS_URL);
+  client.get('SERVER_PORT').then(port => process.env.PORT = port)
+  client.get('MONGO_URI').then(uri => process.env.MONGO_URI = uri)
+  client.get('JWT_SECRET').then(secret => process.env.JWT_SECRET = secret)
+  client.get('EMAIL').then(email => process.env.EMAIL = email)
+  client.get('EMAIL_PASSWORD').then(password => process.env.EMAIL_PASSWORD = password)
+}
+const { connect } = require('mongoose');
 const cors = require("cors");
 const morgan = require("morgan");
 const cookie = require("cookie-parser");
 const bodyParser = require("body-parser");
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
 const swaggerUi = require("swagger-ui-express");
 const { apiDoc } = require('./docs');
 const app = express();
@@ -97,4 +107,11 @@ io.on("connection", (socket) => {
     console.log(err);
   }
 })
-server.listen(3002, () => console.log("listening to 3002"));
+
+connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('Database connected');
+  server.listen(3002, () => console.log("listening to 3002"));
+});

@@ -47,27 +47,24 @@ const mailServer = nodemailer.createTransport({
   },
 });
 
-function login(req, flag, res) {
+async function login(req, res, next) {
   const { email, password, is_checked } = req.body;
-  return User.findOne({ email })
-    .then((user) => {
-      if (!user) {
-        res.status(400).send({ message: "User not found" });
-      }
-      return user.comparePassword(password);
-    })
-    .then((user) => {
-      console.log(user);
-      if (user && user.role === flag) {
-        return User.findByIdAndUpdate(user._id, { logged_in: true }).then(res => {
-          return { user, token: user.generateToken() };
-        });
-      } else res.status(401).send("User doesnt have permissions");
-    })
-    .catch((err) => {
-      console.log(err);
-      throw 'User credentials are incorrect';
-    });
+  const flag = req.params.role;
+  try {
+    let user = await User.findOne({ email });
+    if (!user) {
+      return next({ message: 'User not found', status: 401 });
+    }
+    user = await user.comparePassword(password);
+    if (user && user.role === flag) {
+      const userRes = await User.findByIdAndUpdate(user._id, { logged_in: true });
+      token = user.generateToken();
+      return res.cookie("login", token).status(200).json({ message: "Login Successful", user, token });
+    } else return next({ message: 'User doesnt have permissions', status: 401 });
+  } catch (err) {
+    console.log('err', err);
+    return next({ message: 'User credentials are incorrect', status: 400 });
+  }
 }
 
 async function signup(user, res) {
