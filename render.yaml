@@ -14,16 +14,15 @@ services:
       - key: NODE_ENV
         value: production
 
-
   - type: web
     env: static
     name: dino-app
     repo: https://github.com/FreSauce/dino-jobs-react.git
-    buildFilter: 
+    buildFilter:
       paths:
         - app/**
     buildCommand: yarn && yarn build --filter-frontend
-    staticPublishPaths: ./app/build
+    staticPublishPath: ./app/build
     routes:
       - type: rewrite
         source: /*
