@@ -5,7 +5,7 @@ import { addAppliedJob } from "../store/userReducer";
 
 const useAuth = () => {
   const api = axios.create({
-    baseURL: 'http://localhost:3002/'
+    baseURL: process.env.REACT_APP_API_URL,
   });
   const { token } = useSelector(state => state.auth);
   const dispatch = useDispatch();

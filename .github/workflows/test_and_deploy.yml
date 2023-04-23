@@ -1,0 +1,44 @@
+name: Tests
+on:
+  push:
+    branches:
+    - main
+  
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_MONGO_URI: ${{ secrets.MONGO_URI }}
+
+      - name: Install dependencies
+        run: |
+          yarn
+          yarn test
+
+      
+  deploy:
+    name: Deploy
+    needs: tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to prod
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.SERVICE_ID }}
+          api-key: ${{ secrets.API_KEY }}
