@@ -14,6 +14,7 @@ const TEST_USER = {
 
 describe("Auth Controller", function () {
 	before(function (done) {
+		console.log(process.env.MONGO_URI)
 		mongoose
 			.connect(process.env.MONGO_URI)
 			.then((result) => {
