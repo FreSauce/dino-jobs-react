@@ -2,7 +2,7 @@ name: Tests
 on:
   push:
     branches:
-    - master
+      - master
   
 jobs:
   tests:
@@ -28,6 +28,7 @@ jobs:
           envkey_MONGO_URI: ${{ secrets.MONGO_URI }}
 
       - name: Install dependencies
+        working-directory: ./server
         run: |
           yarn
           yarn test

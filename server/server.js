@@ -1,14 +1,4 @@
 require("dotenv").config();
-const redis = require('redis');
-
-if (process.env.NODE_ENV !== 'production') {
-  const client = redis.createClient(process.env.REDIS_URL);
-  client.get('SERVER_PORT').then(port => process.env.PORT = port)
-  client.get('MONGO_URI').then(uri => process.env.MONGO_URI = uri)
-  client.get('JWT_SECRET').then(secret => process.env.JWT_SECRET = secret)
-  client.get('EMAIL').then(email => process.env.EMAIL = email)
-  client.get('EMAIL_PASSWORD').then(password => process.env.EMAIL_PASSWORD = password)
-}
 const { connect } = require('mongoose');
 const cors = require("cors");
 const morgan = require("morgan");
