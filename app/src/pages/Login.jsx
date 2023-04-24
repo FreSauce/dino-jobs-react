@@ -145,7 +145,7 @@ const Login = ({ recruiter }) => {
                   <Link
                     mt={10}
                     style={{ textDecoration: "none" }}
-                    to={"/register"}
+                    to={recruiter ? '/recruiter/register' : "/register"}
                   >
                     <Text variant="link" sx={{ display: "inline" }}>
                       Sign up

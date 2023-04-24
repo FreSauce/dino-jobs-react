@@ -24,6 +24,7 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
+    select: false
   },
   role: {
     type: String,
@@ -72,8 +73,10 @@ const UserSchema = new Schema({
 UserSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
-  delete userObject.password;
   delete userObject.tokens;
+  if (userObject.role === 'user') {
+    delete userObject.company;
+  }
   userObject.key = userObject._id;
   delete userObject._id;
   return userObject;

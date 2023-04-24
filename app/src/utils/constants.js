@@ -2,6 +2,34 @@ const authInitialState = {
   user: { email: "suvanth", role: "manager" },
 };
 
+
+const skillData = [
+  {
+    value: 'c',
+    label: 'C'
+  },
+  {
+    value: 'c++',
+    label: 'C++'
+  },
+  {
+    value: 'java',
+    label: 'Java'
+  },
+]
+
+
+const typeData = [
+  {
+    value: 'Internship',
+    label: 'Internship'
+  },
+  {
+    value: 'Job',
+    label: 'Job'
+  },
+]
+
 const jobs = [{
   type: 'Internship',
   company: 'Google',
@@ -224,4 +252,4 @@ const jobs = [{
   req_experience: 11
 }]
 
-export { authInitialState, jobs };
+export { authInitialState, jobs, skillData, typeData };

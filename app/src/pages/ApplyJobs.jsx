@@ -12,7 +12,7 @@ const AppliedJobs = () => {
 	return (
 		<MainWrapper>
 			<div style={{ display: "flex" }}>
-				<Container mt="xl" mb="xl" >
+				<Container mt="xl" mb="xl" sx={{ width: '100%' }}>
 					<h1>Applied jobs</h1>
 					<br />
 					<Grid px={25}>

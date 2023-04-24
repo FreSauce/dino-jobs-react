@@ -9,7 +9,7 @@ const { getUpdateProfile } = require("../utils");
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (!fs.existsSync(`public/uploads/${req.user.key.toString()}`)) {
-      fs.mkdirSync(`public/uploads/${req.user.key.toString()}`);
+      fs.mkdirSync(`public/uploads/${req.user.key.toString()}`, { recursive: true });
     }
     cb(null, `public/uploads/${req.user.key.toString()}/`);
   },
@@ -18,20 +18,8 @@ const multerStorage = multer.diskStorage({
   },
 });
 
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error("The file is not an image. Please upload a image", 400),
-      false
-    );
-  }
-};
-
 const upload = multer({
   storage: multerStorage,
-  // fileFilter: multerFilter,
 });
 
 
@@ -51,7 +39,7 @@ async function login(req, res, next) {
   const { email, password, is_checked } = req.body;
   const flag = req.params.role;
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email }).select('+password');
     if (!user) {
       return next({ message: 'User not found', status: 401 });
     }
@@ -86,6 +74,9 @@ async function signup(user, res) {
 
 async function manSignup(user, company, res) {
   const new_user = new User(user);
+  if (company.logo !== undefined) {
+    company.logo = '';
+  }
   const new_company = new Company(company);
   console.log(new_user);
   try {
@@ -158,7 +149,7 @@ async function updateUser(req, res, next) {
 
 async function sendEmail(email, html, sub) {
   const mailOptions = {
-    from: "rookievesper@gmail.com",
+    from: process.env.EMAIL,
     to: email,
     subject: sub,
     html: html,
@@ -216,14 +207,13 @@ const createJob = async (req, res, next) => {
     const new_job = new Job(job);
     if (user.company) {
       new_job.company = user.company;
-      await new_job.save((err, docs) => {
-        if (err) next("Internal Server Error");
-        res.status(200).json({ result: "Job Created" });
-      });
+      const jb = await new_job.save()
+      res.status(200).json({ result: "Job Created" });
     } else {
       next("User doesnt have a company");
     }
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
@@ -273,6 +263,7 @@ const getJobs = async (req, res, next) => {
     next();
   }
 };
+
 const getAllInvites = async (req, res, next) => {
   const user = req.user;
   console.log(user);
@@ -307,7 +298,8 @@ const inviteApplicant = async (req, res, next) => {
     const ud = inv.save();
     console.log(ud);
     res.status(200).json({ message: 'Invited Applicant', link });
-    // sendEmail()
+    let html = `<h1>You have been invited to apply for a job</h1><p>Click on the link below to apply</p><a href="http://localhost:3000/interview/${link}">Join Meet</a>`
+    sendEmail(userEmail, html, 'Invitation to apply for a job')
   } catch (err) {
     next({ message: err, status: 500 })
   }
@@ -346,6 +338,17 @@ const managerProfile = async (req, res, next) => {
     next();
   }
 };
+
+const getDistinctRoles = async (req, res, next) => {
+  try {
+    const roles = await Job.distinct('role');
+    res.status(200).json(roles);
+  } catch (err) {
+    req.err = err;
+    next();
+  }
+}
+
 module.exports = {
   login,
   signup,
@@ -363,5 +366,6 @@ module.exports = {
   managerProfile,
   getJobs,
   inviteApplicant,
-  getProfile
+  getProfile,
+  getDistinctRoles
 };

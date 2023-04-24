@@ -25,7 +25,7 @@ const { errorHandler } = require("./middleware");
 
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 app.use(cors());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDoc))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(apiDoc));
 app.use(express.static("public"));
 
 
@@ -72,25 +72,25 @@ io.on("connection", (socket) => {
             });
           }
         }
-        console.log(socketInfo);
+        // console.log(socketInfo);
         socket.on("disconnect", () => {
           delete socketInfo[roomId][userId];
           io.to(roomId).emit("user-disconnected", userId);
           if (Object.keys(socketInfo[roomId]).length === 0) {
             delete socketInfo[roomId];
           }
-          console.log(socketInfo);
+          // console.log(socketInfo);
         });
       }
     })
 
     socket.on("offer", (payload) => {
-      console.log(payload, 'off');
+      // console.log(payload, 'off');
       io.to(socketInfo[payload.roomId][payload.targetId].socketId).emit("offer", payload);
     });
 
     socket.on("answer", (payload) => {
-      console.log(payload);
+      // console.log(payload);
       io.to(socketInfo[payload.roomId][payload.targetId].socketId).emit("answer", payload);
     });
   } catch (err) {

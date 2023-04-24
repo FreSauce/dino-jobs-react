@@ -11,7 +11,8 @@ const Invites = new Schema({
 	},
 	link: {
 		type: String,
-		required: true
+		required: true,
+		index: true
 	}
 })
 

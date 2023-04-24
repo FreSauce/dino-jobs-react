@@ -87,7 +87,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "/home", label: "Home", icon: IconHome },
+  { link: "/", label: "Home", icon: IconHome },
   { link: "/jobs", label: "Jobs", icon: IconReceipt2 },
   { link: "/interview", label: "Interview", icon: IconKey },
   { link: "/saved-jobs", label: "Saved Jobs", icon: IconReceipt2 },

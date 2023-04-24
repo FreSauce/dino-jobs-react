@@ -271,7 +271,7 @@ const ProfileForm = () => {
 							</Grid>
 							<Grid mt={24}>
 								{user.resume ?
-									<iframe width={'100%'} height={'400px'} src={`http://localhost:3002/${user.resume.replace('public/', '')}`} frameBorder="0" title='hehe' ></iframe> : <div></div>
+									<iframe width={'100%'} height={'400px'} src={`${process.env.REACT_APP_API_URL}/${user.resume.replace('public/', '')}`} frameBorder="0" title='hehe' ></iframe> : <div></div>
 								}
 							</Grid>
 						</Fragment>

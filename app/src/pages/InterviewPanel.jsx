@@ -6,22 +6,22 @@ import {
   Group,
   Text,
   Stack,
+  Select,
 } from "@mantine/core";
 import CodeEditor from "../components/CodeEditor";
 import { HiChevronDoubleRight } from "react-icons/hi";
 import { FiLogOut } from "react-icons/fi";
 import ChatBox from "../components/ChatBox";
 import useWebRTC from "../hooks/useWebRTC";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 
 const InterviewPanel = () => {
   const interviewId = useParams();
-  const [videoRef, chatHandler, editorHandler, compile] = useWebRTC(interviewId);
-  const navigate = useNavigate();
+  const { videoRef, chatHandler, editorHandler, compile, langData } = useWebRTC(interviewId);
 
   const handleClick = () => {
-    navigate('/', { replace: true });
+    window.close();
   }
 
   return (
@@ -49,6 +49,12 @@ const InterviewPanel = () => {
               justifyContent: "flex-end",
             }}
           >
+            <Select
+              data={langData}
+              value={editorHandler.lang}
+              onChange={editorHandler.changeLang}
+              sx={{ marginRight: '25px' }}
+            />
             <Button onClick={compile} variant="filled" leftIcon={<HiChevronDoubleRight />}>
               Run Code
             </Button>
@@ -64,10 +70,10 @@ const InterviewPanel = () => {
         </Grid.Col>
         <Grid.Col span={12}>
           <Grid gutter={0}>
-            <Grid.Col span={4}>
+            <Grid.Col span={6}>
               <CodeEditor editorHandler={editorHandler} initComment={"// Write your code here"} />
             </Grid.Col>
-            <Grid.Col span={5}>
+            <Grid.Col span={3}>
               <Editor
                 height="calc(100vh - 48px)"
                 theme="vs-dark"
@@ -86,7 +92,7 @@ const InterviewPanel = () => {
                   <Card sx={{ width: "100%", aspectRatio: "calc(4/3)", padding: "0 !important" }}>
                     <video style={{
                       transform: "scaleX(-1)",
-                    }} width={320} height={240} ref={videoRef}></video>
+                    }} width={'100%'} height={240} ref={videoRef}></video>
                   </Card>
                 </Container>
                 <ChatBox chatHandler={chatHandler} />

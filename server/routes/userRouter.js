@@ -12,7 +12,8 @@ const {
   getAllInvites,
   getJobs,
   getProfile,
-  inviteApplicant
+  inviteApplicant,
+  getDistinctRoles
 } = require("../controllers/userController");
 const { getLogin, checkMan, checkAdmin } = require("../middleware");
 
@@ -43,5 +44,7 @@ userRouter.get('/get-all-invites', getAllInvites);
 userRouter.post("/manager/home", checkMan, managerProfile);
 
 userRouter.get("/jobs", getJobs);
+
+userRouter.get('/get-distinct-roles', getDistinctRoles);
 
 module.exports = userRouter;

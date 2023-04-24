@@ -9,7 +9,6 @@ import { setJobs } from '../store/userReducer';
 
 const salaryFilterMarks = [{ value: 1000 }, { value: 2000 }, { value: 3000 }, { value: 4000 }, { value: 5000 }, { value: 6000 }, { value: 7000 }, { value: 8000 }, { value: 9000 }, { value: 10000 }]
 const employeeFilterMarks = [{ value: 10 }, { value: 100 }, { value: 200 }, { value: 300 }, { value: 400 }, { value: 500 }, { value: 600 }, { value: 700 }, { value: 800 }, { value: 900 }, { value: 1000 }]
-const roleFilterData = [{ label: "Software Engineer", value: "Software Engineer" }, { label: "Frontend Developer", value: "Frontend Developer" }, { label: "Backend Developer", value: "Backend Developer" }, { label: "Fullstack Developer", value: "Fullstack Developer" }]
 
 const Jobs = () => {
   const { user } = useSelector(state => state.auth);
@@ -18,14 +17,18 @@ const Jobs = () => {
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [salaryFilter, setSalaryFilter] = useState();
   const [employeeFilter, setEmployeeFilter] = useState();
+  const [roleFilterData, setRoleFilterData] = useState([]);
   const [roleFilter, setRoleFilter] = useState();
-  const { getJobs } = useAuth()
+  const { getJobs, getDistinctRoles } = useAuth()
 
   useEffect(() => {
     getJobs().then(res => {
       dispatch(setJobs(res));
     }).catch(err => {
       console.log(err);
+    })
+    getDistinctRoles().then(res => {
+      setRoleFilterData(res.map(r => ({ label: r, value: r })));
     })
   }, [dispatch])
 

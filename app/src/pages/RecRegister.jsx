@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { Link, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { useForm } from "@mantine/form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import validator from "validator";
 import useAuth from "../hooks/useAuth";
 import { showNotification } from "@mantine/notifications";
@@ -27,44 +27,6 @@ const RecRegister = ({ recruiter }) => {
 	const location = useLocation();
 
 	const [active, setActive] = useState(0);
-	const nextStep = () => {
-		if (btn === "Submit") {
-			form.onSubmit(async (values) => {
-				console.log(values);
-				setLoading(true);
-				console.log(values);
-				const res = await signup({
-					...values
-				});
-				if (res) {
-					showNotification({
-						title: "Success",
-						message: "You have been registered successfully",
-						color: "teal",
-						autoClose: 2000,
-					});
-					navigate((recruiter ? "/recruiter" : "") + "/login");
-				} else {
-					showNotification({
-						title: "Error",
-						message: "Something went wrong",
-						color: "red",
-						autoClose: 2000,
-					});
-				}
-				console.log(res);
-				setLoading(false);
-			});
-		}
-		if (active === 1) {
-			setBtn("Submit");
-		}
-		else {
-			setBtn("Next Step");
-		}
-		setActive((current) => (current < 2 ? current + 1 : current));
-	}
-	const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
 	const form = useForm({
 		validateInputOnChange: true,
@@ -78,12 +40,13 @@ const RecRegister = ({ recruiter }) => {
 			description: "",
 			website: '',
 			employees: '',
+			role: 'manager'
 		},
 		validate: {
-			fullname: (value) => (value !== '' ? null : 'Full Name is required'),
+			full_name: (value) => (value !== '' ? null : 'Full Name is required'),
 			email: (value) => (validator.isEmail(value) ? null : "Invalid Email"),
 			password: (value) =>
-				value.length >= 8
+				value.length >= 5
 					? null
 					: "Password must be at least 8 characters long",
 			confirmPassword: (value, { password }) =>
@@ -93,6 +56,49 @@ const RecRegister = ({ recruiter }) => {
 				value ? null : "You must agree to our terms and conditions",
 		},
 	});
+
+
+	const nextStep = async () => {
+		setActive((current) => (current < 2 ? current + 1 : current));
+		if (btn === "Submit") {
+			console.log(form.values)
+			const res = await signup({
+				...form.values
+			});
+			console.log(res);
+			if (res) {
+				showNotification({
+					title: "Success",
+					message: "You have been registered successfully",
+					color: "teal",
+					autoClose: 2000,
+				});
+				navigate("/recruiter/login");
+			} else {
+				showNotification({
+					title: "Error",
+					message: "Something went wrong",
+					color: "red",
+					autoClose: 2000,
+				});
+			}
+			setLoading(false);
+		}
+
+	}
+
+	useEffect(() => {
+		if (active > 0) {
+			setBtn("Submit");
+		}
+		else {
+			setBtn("Next Step");
+		}
+	}, [active])
+
+	const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+
+
 	if (user) {
 		return <Navigate to={location.state?.from || "/"} replace />;
 	}
@@ -151,7 +157,7 @@ const RecRegister = ({ recruiter }) => {
 												required
 												label="Full Name"
 												placeholder="urmom"
-												{...form.getInputProps("fullname")}
+												{...form.getInputProps("full_name")}
 											/>
 											<TextInput
 												mb={13}
@@ -161,14 +167,7 @@ const RecRegister = ({ recruiter }) => {
 												placeholder="urmom@gmail.com"
 												{...form.getInputProps("email")}
 											/>
-											{recruiter ? <TextInput
-												mb={13}
-												withAsterisk
-												required
-												label="Company"
-												placeholder="urmom"
-												{...form.getInputProps('company')}
-											/> : null}
+
 											<PasswordInput
 												mb={13}
 												withAsterisk

@@ -62,7 +62,7 @@ const JobCard = ({ job, applied, saved, savI, applyI }) => {
       <Card shadow="sm" radius="md" withBorder>
         <Group ml="xs">
           <Image
-            src={`http://localhost:3002/${job.company.logo.replace('public/', '')}`}
+            src={`${process.env.REACT_APP_API_URL}/${job.company?.logo?.replace('public/', '')}`}
             height={70}
             width={70}
             fit="contain"

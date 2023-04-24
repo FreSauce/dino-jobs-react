@@ -21,12 +21,17 @@ const { eval } = require("../utils/compile")
 //   res.send(offers[interviewId]);
 // });
 
-router.post("/compile", (req, res) => {
+router.post("/compile", async (req, res, next) => {
   console.log("hit compile");
-  console.log(req.body);
   const { code, language } = req.body;
-  const result = eval(code.text, language);
-  res.send(JSON.stringify(result));
+  try {
+
+    const result = await eval(code.text, language);
+    console.log(result)
+    res.status(200).send(JSON.stringify(result));
+  } catch (err) {
+    next({ status: 500, message: err })
+  }
 })
 
 module.exports = router;

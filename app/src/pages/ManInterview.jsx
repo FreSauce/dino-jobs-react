@@ -24,7 +24,7 @@ const ManInterview = () => {
 		}).catch(err => {
 			console.log(err);
 		})
-	}, [dispatch, getJobs]);
+	}, [dispatch]);
 
 	const getAppliedUsers = (job_id) => {
 		setSelectedJob(job_id)

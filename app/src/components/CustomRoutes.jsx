@@ -5,8 +5,8 @@ import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { setToken } from "../store/authReducer";
 
-const CustomRoutes = ({ allowedRoles }) => {
-  const { user, loading, token } = useSelector(state => state.auth);
+const CustomRoutes = ({ allowedRoles, user }) => {
+  const { loading, token } = useSelector(state => state.auth);
   const location = useLocation();
   const { getUser } = useAuth();
   const navigate = useNavigate();
@@ -17,7 +17,9 @@ const CustomRoutes = ({ allowedRoles }) => {
       getUser();
   }, [token]);
 
-
+  // if (!token) {
+  //   return <Navigate to="/login" />;
+  // }
   if (loading)
     return (
       <Container

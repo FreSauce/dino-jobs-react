@@ -17,7 +17,6 @@ import ManJobs from "./pages/ManJobs";
 import JobHandler from "./components/JobHandler";
 import InterviewHandler from "./components/InterviewHandler";
 
-
 function App() {
   const { user } = useSelector(state => state.auth)
   const { saved_jobs } = useSelector(state => state.user);
@@ -52,7 +51,7 @@ function App() {
         <Route path="/recruiter/jobs" element={<ManJobs />} />
 
         <Route path="/" element={<Home />} />
-        <Route element={<CustomRoutes allowedRoles={["user", "manager"]} />}>
+        <Route element={<CustomRoutes allowedRoles={["user", "manager"]} user={user} />}>
           <Route path="/interview/:interviewId" element={<InterviewPanel />} />
           <Route path="/profile" element={<Profile />} />
           <Route path='/interview' element={<InterviewHandler />} />

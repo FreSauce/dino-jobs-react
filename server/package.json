@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --timeout 50000",
+    "test": "mocha --timeout 5000",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
@@ -11,6 +11,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
+    "compile-run": "^2.3.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

@@ -14,7 +14,6 @@ const TEST_USER = {
 
 describe("Auth Controller", function () {
 	before(function (done) {
-		console.log(process.env.MONGO_URI)
 		mongoose
 			.connect(process.env.MONGO_URI)
 			.then((result) => {
@@ -45,6 +44,7 @@ describe("Auth Controller", function () {
 		};
 
 		let res;
+
 		const next = ({ ...resp }) => {
 			res = resp
 		}
@@ -79,46 +79,47 @@ describe("Auth Controller", function () {
 		})
 	});
 
-	// it("should return a valid user status for an existing user", function (done) {
+	it("should return a valid user status for an existing user", function (done) {
 
-	// 	const req = {
-	// 		body: {
-	// 			email: TEST_USER.email,
-	// 			password: TEST_USER.password,
-	// 		},
-	// 		params: {
-	// 			role: 'user'
-	// 		}
-	// 	};
+		const req = {
+			body: {
+				email: TEST_USER.email,
+				password: TEST_USER.password,
+			},
+			params: {
+				role: 'user'
+			}
+		};
 
-	// 	let result;
+		let result = {};
 
-	// 	let res = {
-	// 		cookie: function (cook) {
-	// 			result['cookie'] = cook;
-	// 			return this;
-	// 		},
-	// 		status: function (status) {
-	// 			result['status'] = status;
-	// 			return this;
-	// 		},
-	// 		json: function (json) {
-	// 			result['json'] = json;
-	// 		}
-	// 	}
-	// 	const next = ({ ...resp }) => {
-	// 		res = resp
-	// 	}
+		let res = {
+			cookie: function (cook, val) {
+				result[cook] = val;
+				return this;
+			},
+			status: function (status) {
+				result['status'] = status;
+				return this;
+			},
+			json: function ({ ...json }) {
+				result = { ...result, ...json };
+			}
+		}
+		const next = ({ ...resp }) => {
+			res = resp
+		}
 
-	// 	controller.login(req, res, next).then((_) => {
-	// 		console.log(result.status(), result)
-	// 		expect(result.status).to.be.equal(200);
-	// 		expect(result.userData).to.have.property("message", "Login Successful");
-	// 		expect(result).to.have.property("token");
-	// 		expect(result.user.email).to.be.equal(TEST_USER.email);
-	// 		done();
-	// 	})
-	// });
+		controller.login(req, res, next).then((_) => {
+			expect(result.status).to.be.equal(200);
+			expect(result).to.have.property("token");
+			expect(result).to.have.property("message", "Login Successful");
+			expect(result.user.email).to.be.equal(TEST_USER.email);
+			done();
+		}).catch((err) => {
+			console.log(err)
+		});
+	});
 
 	after(function (done) {
 		User.findOneAndDelete({ email: TEST_USER.email })
@@ -133,4 +134,6 @@ describe("Auth Controller", function () {
 	afterEach(function (done) {
 		done();
 	});
+
+
 });

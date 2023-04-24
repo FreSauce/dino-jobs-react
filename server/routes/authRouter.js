@@ -47,4 +47,5 @@ authRouter.get("/verify/:token", (req, res, next) => {
   }
 });
 
+
 module.exports = authRouter;

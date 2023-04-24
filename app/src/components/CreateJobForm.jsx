@@ -6,28 +6,15 @@ import {
 	Stepper,
 	TextInput,
 	Radio,
-	Checkbox,
+	Select,
 	Box,
 	MultiSelect,
 } from "@mantine/core";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import useAuth from "../hooks/useAuth";
+import { skillData, typeData } from '../utils/constants'
 
 
-const skillData = [
-	{
-		value: 'c',
-		label: 'C'
-	},
-	{
-		value: 'c++',
-		label: 'C++'
-	},
-	{
-		value: 'java',
-		label: 'Java'
-	},
-]
 
 const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 	const { createJobs } = useAuth();
@@ -41,10 +28,12 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 			salary: 0,
 			req_skills: [],
 			req_experience: "",
+			type: ""
 		},
 	});
 	const [active, setActive] = useState(0);
 	const [btn, setBtn] = useState("Next Step");
+	const jobType = useMemo(() => typeData, [])
 	const nextStep = () => {
 		console.log(btn);
 		if (btn === "Submit") {
@@ -66,7 +55,6 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 		setActive((current) => (current < 3 ? current + 1 : current));
 	};
 	const prevStep = () => {
-
 		if (active === 2) {
 			setBtn("Submit");
 		}
@@ -106,14 +94,6 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 					</Stepper.Step>
 					<Stepper.Step p={20} label="Second step">
 						<Box px={30}>
-
-							<TextInput
-								label="Company"
-								placeholder="Company*"
-								{...form.getInputProps("company")}
-								mb={13}
-								required
-							/>
 							<TextInput
 								type="Number"
 								label="Salary"
@@ -121,6 +101,13 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 								{...form.getInputProps("salary")}
 								mb={13}
 								required
+							/>
+							<Select
+								data={jobType}
+								label="Job Type"
+								required
+								{...form.getInputProps("type")}
+								withAsterisk
 							/>
 						</Box>
 					</Stepper.Step>
@@ -155,7 +142,7 @@ const CreateJobForm = ({ opened, setOpened, setJobs }) => {
 						</Box>
 					</Stepper.Step>
 					<Stepper.Completed>
-						Completed, click back button to get to previous step
+						Completed, click back button to edit the job
 					</Stepper.Completed>
 				</Stepper>
 				<Group position="center" mt="xl">

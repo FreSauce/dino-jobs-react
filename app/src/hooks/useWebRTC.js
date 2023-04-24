@@ -1,13 +1,22 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useSelector } from "react-redux";
 import io from "socket.io-client";
 import useAuth from "./useAuth";
 
 const useWebRTC = ({ interviewId }) => {
+  const langData = useMemo(() => [
+    { label: 'C', value: 'c' },
+    { label: 'C++', value: 'cpp' },
+    { label: 'Python', value: 'python' },
+    { label: 'Java', value: 'java' },
+    { label: 'Javascript', value: 'javascript' },
+  ], [])
   const [socket, setSocket] = useState(io("http://localhost:3002"));
   const [socketIsConnected, setSocketIsConnected] = useState(socket.connected);
   const { user, token } = useSelector(state => state.auth);
   const { runCode } = useAuth();
+  const [selectedLang, setSelectedLang] = useState(langData[0].value);
+
 
   const [userList, setUserList] = useState({});
   const [peer, setPeer] = useState(null);
@@ -16,12 +25,20 @@ const useWebRTC = ({ interviewId }) => {
   const [chats, setChats] = useState([]);
   const [editorValue, setEditorValue] = useState("");
   const [editorOutput, setEditorOutput] = useState("This is sample output");
+  const [editorOutputLoading, setEditorOutputLoading] = useState(false);
 
   const compile = async () => {
-    const output = await runCode(editorValue, "cpp");
+    setEditorOutputLoading(true);
+    const output = await runCode(editorValue, selectedLang);
+    setEditorOutputLoading(false);
     setEditorOutput(output);
     peer.send(JSON.stringify({ type: "output", payload: output }));
   };
+
+  const changeEditorLang = (lang) => {
+    setSelectedLang(lang);
+    peer.send(JSON.stringify({ type: "lang", payload: lang }));
+  }
 
   const changeEditorValue = value => {
     setEditorValue(value);
@@ -148,6 +165,11 @@ const useWebRTC = ({ interviewId }) => {
             setEditorOutput(jsondata.payload);
           }
         }
+        if (jsondata.type === "lang") {
+          if (jsondata.payload !== selectedLang) {
+            setSelectedLang(jsondata.payload);
+          }
+        }
       });
 
       peer.on("stream", (stream) => {
@@ -173,7 +195,13 @@ const useWebRTC = ({ interviewId }) => {
     }
   }, [peer]);
 
-  return [videoRef, { chats, sendChat }, { value: editorValue, change: changeEditorValue, output: editorOutput }, compile];
+  return {
+    videoRef,
+    chatHandler: { chats, sendChat },
+    editorHandler: { value: editorValue, change: changeEditorValue, output: editorOutput, changeLang: changeEditorLang, lang: selectedLang, editorOutputLoading },
+    compile,
+    langData
+  };
 };
 
 export default useWebRTC;

@@ -53,6 +53,15 @@ const useAuth = () => {
     return res.data;
   }
 
+  const getDistinctRoles = async () => {
+    const res = await api.get('/get-distinct-roles', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return res.data;
+  }
+
   const createJobs = async (job) => {
     const res = await api.post('create-job', job, {
       headers: {
@@ -180,7 +189,7 @@ const useAuth = () => {
     localStorage.removeItem('token');
   };
 
-  return { login, logout, signup, getUser, getJobs, applyJob, createJobs, getApplicants, updateProfile, sendInvite, getProfile, runCode, getAllInvites };
+  return { login, logout, signup, getUser, getJobs, getDistinctRoles, applyJob, createJobs, getApplicants, updateProfile, sendInvite, getProfile, runCode, getAllInvites };
 };
 
 export default useAuth;
