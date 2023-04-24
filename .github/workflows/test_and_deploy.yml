@@ -26,6 +26,8 @@ jobs:
         uses: SpicyPizza/create-envfile@v1
         with:
           envkey_MONGO_URI: ${{ secrets.MONGO_URI }}
+          directory: ./server
+
 
       - name: Install dependencies
         working-directory: ./server
