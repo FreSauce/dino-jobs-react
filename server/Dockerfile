@@ -4,7 +4,7 @@ WORKDIR /server
 
 COPY package.json .
 
-RUN apt update && apt-get -y install openjdk-8-jdk python3 gcc g++
+RUN apt-get -y install openjdk-8-jdk python3 gcc g++
 
 RUN yarn
 
