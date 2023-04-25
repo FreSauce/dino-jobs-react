@@ -2,9 +2,9 @@ FROM node
 
 WORKDIR /server
 
-COPY package.json .
+COPY package.json ./
 
-RUN apt-get -y install openjdk-8-jdk python3 gcc g++
+RUN apt-get -y install python3 gcc g++
 
 RUN yarn
 
