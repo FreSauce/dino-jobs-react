@@ -5,7 +5,6 @@ import {
 	IconHome,
 	IconUser,
 	IconKey,
-	IconSettings,
 	IconReceipt2,
 	IconLogout,
 } from "@tabler/icons";

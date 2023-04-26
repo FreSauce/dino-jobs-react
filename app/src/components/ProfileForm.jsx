@@ -183,7 +183,7 @@ const ProfileForm = () => {
 						</Grid.Col>
 						<Grid.Col span={4}>
 							<Input type={'file'} alt='image' onChange={handleImageChange} accept='image/*' hidden ref={imageRef} />
-							<img src={user.avatar ? `http://localhost:3002/${user.avatar.replace('public/', '')}` : 'https://icons.veryicon.com/png/o/miscellaneous/font-awesome-2/user-circle-o-2.png'} onClick={handleImage} className={styles.profile_img} ref={imageContainer} alt={'profile'} />
+							<img src={user.avatar ? `${process.env.REACT_APP_API_URL}/${user.avatar.replace('public/', '')}` : 'https://icons.veryicon.com/png/o/miscellaneous/font-awesome-2/user-circle-o-2.png'} onClick={handleImage} className={styles.profile_img} ref={imageContainer} alt={'profile'} />
 						</Grid.Col>
 					</Grid>
 
@@ -220,7 +220,7 @@ const ProfileForm = () => {
 							</Grid.Col>
 							<Grid.Col span={4}>
 								<Input type={'file'} alt='image' onChange={handleCompanyImageChange} accept='image/*' hidden ref={imageCompRef} />
-								<img src={user.company.logo ? `http://localhost:3002/${user.company.logo.replace('public/', '')}` : 'https://icons.veryicon.com/png/o/miscellaneous/font-awesome-2/user-circle-o-2.png'} onClick={handleCompanyImage} className={styles.profile_img} ref={imageCompContainer} alt={'compProfile'} />
+								<img src={user.company.logo ? `${process.env.REACT_APP_API_URL}/${user.company.logo.replace('public/', '')}` : 'https://icons.veryicon.com/png/o/miscellaneous/font-awesome-2/user-circle-o-2.png'} onClick={handleCompanyImage} className={styles.profile_img} ref={imageCompContainer} alt={'compProfile'} />
 							</Grid.Col>
 						</Grid> :
 						<Fragment>

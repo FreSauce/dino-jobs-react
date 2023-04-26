@@ -11,7 +11,7 @@ const useWebRTC = ({ interviewId }) => {
     { label: 'Java', value: 'java' },
     { label: 'Javascript', value: 'javascript' },
   ], [])
-  const [socket, setSocket] = useState(io("http://localhost:3002"));
+  const [socket, setSocket] = useState(io(process.env.REACT_APP_API_URL));
   const [socketIsConnected, setSocketIsConnected] = useState(socket.connected);
   const { user, token } = useSelector(state => state.auth);
   const { runCode } = useAuth();

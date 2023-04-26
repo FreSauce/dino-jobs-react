@@ -13,6 +13,10 @@ exports.apiDoc = {
 		{
 			url: 'http://localhost:3002/',
 			description: 'Local Server',
+		},
+		{
+			url: 'https://dino-jobs-server.onrender.com/',
+			description: 'Production Server',
 		}
 	],
 	tags: [

@@ -1,6 +1,5 @@
 import {
   Container,
-  Text,
   Tabs,
   Group,
   Avatar,
